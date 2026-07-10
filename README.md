@@ -5,7 +5,7 @@ The repository root **is** the website root (no build step). Static, dependency-
 site for the FarmFlow Android app, designed to sit alongside (but look nothing like)
 civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 
-## Structure
+## Structure.
 
 ```
 /
