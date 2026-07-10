@@ -267,12 +267,14 @@ details.acc .acc-body ul{margin:0 0 10px 20px}
   transition:transform .15s ease, background .15s ease;border:none;cursor:pointer;
   font-family:"Nunito Sans",sans-serif;
 }
+a.btn-primary{color:#fff}
 .btn-primary:hover{transform:translateY(-2px);background:#356A33}
 .btn-gold{
   display:inline-block;background:var(--gold);color:#3A2A05;text-decoration:none;
   font-weight:800;font-size:.95rem;padding:13px 26px;border-radius:12px;
   transition:transform .15s ease, background .15s ease;
 }
+a.btn-gold{color:#3A2A05}
 .btn-gold:hover{transform:translateY(-2px);background:#F7B84B}
 
 /* prev/next helper links */
