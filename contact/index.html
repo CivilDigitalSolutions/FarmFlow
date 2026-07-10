@@ -3,22 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-  // Deep-link router. GitHub Pages serves this 404 page for any unmatched path. Shared FarmFlow
-  // listing links (/listing/{id} — or legacy /farmflow/listing/{id} redirected from the old
-  // civildigital.co.uk/farmflow location) have no static file, so forward them to the listing
-  // landing page carrying the id as a query param. Runs before render (location.replace, no history
-  // entry, no flash). All other 404s fall through to the normal "page not found" content below.
-  (function () {
-    var m = location.pathname.match(/^\/(?:farmflow\/)?listing\/(.+?)\/?$/);
-    if (m && m[1]) {
-      location.replace("/listing/?id=" + encodeURIComponent(decodeURIComponent(m[1])));
-    }
-  })();
-</script>
-<title>Page not found — FarmFlow</title>
-<meta name="description" content="The page you were looking for could not be found.">
-<meta name="robots" content="noindex">
+<title>Contact Support — FarmFlow</title>
+<meta name="description" content="Contact the FarmFlow support team by email or WhatsApp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
@@ -30,9 +16,9 @@
 
 <header class="subhero">
   <div class="wrap">
-    <div class="crumb"><a href="/">← FarmFlow Home</a></div>
-    <h1>We couldn't find that page</h1>
-    <p>The page may have moved or never existed. Let's get you back to the fields.</p>
+    <div class="crumb"><a href="https://farmflow.civildigital.co.uk/">← FarmFlow Home</a></div>
+    <h1>Contact FarmFlow Support</h1>
+    <p>We aim to respond within two working days.</p>
   </div>
 </header>
 <svg class="fields-sm" viewBox="0 0 1440 44" preserveAspectRatio="none" aria-hidden="true">
@@ -46,14 +32,39 @@
 </svg>
 
 <main class="wrap-narrow page prose">
-  <div class="card gold">
-    <h3>Error 404</h3>
-    <p>Try one of these instead:</p>
-    <p>
-      <a class="btn-primary" href="/">FarmFlow Home</a>
-      <a class="btn-primary" href="/help/">Help &amp; Support</a>
-      <a class="btn-primary" href="/contact/">Contact</a>
-    </p>
+
+  <div class="card green">
+    <h3>Email us</h3>
+    <p>For account issues, listing questions, verification, boosts, or anything else:</p>
+    <p><a class="btn-primary" href="mailto:info@civildigital.co.uk">info@civildigital.co.uk</a></p>
+    <p class="muted">Include the email address on your FarmFlow account so we can find you faster.</p>
+  </div>
+
+  <div class="card green">
+    <h3>WhatsApp</h3>
+    <p>For seller enquiries, including boosted listings and the Verified Seller Programme:</p>
+    <p><a class="btn-gold" href="https://wa.me/447568296136">Message us on WhatsApp</a></p>
+    <p class="muted">We aim to reply within one working day.</p>
+  </div>
+
+  <h2>Before you write in</h2>
+  <ul>
+    <li><strong>Report in the app first</strong> for problem listings or users — reports reach moderators fastest through the report button on the listing or chat.</li>
+    <li><strong>Check the <a href="/faqs/">FAQs</a></strong> — most common questions are answered there.</li>
+    <li><strong>Account deletion</strong> has its own dedicated process: <a href="/account-deletion/">Delete My Account &amp; Data</a>.</li>
+  </ul>
+
+  <h2>What to include</h2>
+  <ul>
+    <li>The email address on your FarmFlow account</li>
+    <li>Your island and town (helps with location issues)</li>
+    <li>A screenshot, if the problem is visual</li>
+    <li>The listing title or link, if your question is about a listing</li>
+  </ul>
+
+  <div class="related">
+    <a href="/help/">Help &amp; Support</a>
+    <a href="/faqs/">FAQs</a>
   </div>
 </main>
 

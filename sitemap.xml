@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://farmflow.civildigital.co.uk/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/help.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/faqs.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/privacy.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/terms.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/prohibited-items.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/safety.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/community-guidelines.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/account-deletion.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/verified-sellers.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/help/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/faqs/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/privacy/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/terms/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/prohibited-items/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/safety/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/community-guidelines/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/account-deletion/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/verified-sellers/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
