@@ -35,6 +35,12 @@ img,svg{max-width:100%}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 .wrap-narrow{max-width:780px;margin:0 auto;padding:0 20px}
 
+/* Give support and policy pages more breathing room on phone screens.
+   Desktop/tablet gutters keep their existing dimensions. */
+@media (max-width:600px){
+  .subhero .wrap,.page.wrap-narrow{padding-inline:28px}
+}
+
 /* ---------- top notice ---------- */
 .notice{
   background:var(--green-deep);
