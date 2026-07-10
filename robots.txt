@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://farmflow.civildigital.co.uk/sitemap.xml
