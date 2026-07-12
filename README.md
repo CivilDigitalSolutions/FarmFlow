@@ -21,7 +21,7 @@ civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 ├── account-deletion.html       # Account & data deletion (Play REQUIRED URL)
 ├── verified-sellers.html       # Verified Seller Programme
 ├── listing/index.html          # Shared-listing landing page (open-in-app / Play Store)
-├── 404.html                    # Not-found page + /listing/{id} deep-link router
+├── 404.html                    # Not-found page + /listing/{slug}?id={id} deep-link router
 ├── CNAME                       # Pins the farmflow.civildigital.co.uk custom domain
 ├── robots.txt / sitemap.xml
 ├── .well-known/
@@ -43,16 +43,23 @@ civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 
 ## Listing deep links
 
-Shared listing links (`https://farmflow.civildigital.co.uk/listing/{id}`) have no static file;
-`404.html` forwards them to `/listing/?id={id}` before render. Legacy links on the old path
-(`https://civildigital.co.uk/farmflow/listing/{id}`) are redirected here by the main site's 404 page.
+The app shares listings as `https://farmflow.civildigital.co.uk/listing/{name-slug}?id={listingId}` —
+pointed **directly** at this subdomain (no main-domain redirect). The path segment is a human-readable
+slug of the listing name (what recipients see); `?id=` carries the real listing id, which is what
+resolves the listing (names are not unique). That path has no static file, so `404.html` forwards it to
+`/listing/?id={id}&name={slug}` before render, and `listing/index.html` shows the name + reference and
+offers open-in-app / Play Store. Legacy links that put the id straight in the path
+(`/listing/{id}`, or the old `/farmflow/listing/{id}`) still resolve: the `404.html` router falls back
+to treating the path segment as the id when no `?id=` is present.
 
 ## `.well-known/assetlinks.json`
 
-Copy of the Android App Links statement for `com.civildigital.farmflow`. The app's
-password-reset deep link currently verifies against **civildigital.co.uk** (the file must also
-stay live there); this copy makes the subdomain ready if/when the app's intent filters move to
-`farmflow.civildigital.co.uk`. Keep the `sha256_cert_fingerprints` arrays in both copies in sync.
+Android App Links statement for `com.civildigital.farmflow`. The app's **listing share** App Link now
+verifies against **farmflow.civildigital.co.uk**, so this file must stay live here at
+`/.well-known/assetlinks.json` for share links to open the app directly. The app's **password-reset**
+deep link still verifies against **civildigital.co.uk**, so the same statement must also stay live at
+`civildigital.co.uk/.well-known/assetlinks.json`. Keep the `sha256_cert_fingerprints` arrays in both
+copies in sync.
 
 ## Design notes
 

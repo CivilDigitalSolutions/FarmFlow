@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmFlow account · Secure link</title>
+<meta name="description" content="Securely complete your FarmFlow account action — reset your password or verify your email.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3E7C3C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<link rel="icon" href="/images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/farmflow.css">
+<style>
+  /* Auth-handler page — scoped styles, layered on the shared FarmFlow brand sheet. */
+  .auth-main{min-height:60vh;display:flex;align-items:flex-start;justify-content:center;padding:0 20px 64px}
+  .auth-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-lift);width:100%;max-width:460px;margin-top:-46px;
+    padding:34px 30px 30px;position:relative;z-index:2;
+  }
+  @media (max-width:520px){ .auth-card{padding:28px 22px 24px} }
+  .auth-card h2{font-size:1.42rem;margin:0 0 6px}
+  .auth-lede{color:var(--ink-soft);font-size:.95rem;margin:0 0 20px}
+  .auth-email{font-weight:700;color:var(--green-deep);word-break:break-all}
+
+  /* State visibility: only the active [data-state] block is shown. */
+  [data-state]{display:none}
+  [data-state].is-active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* Status icon disc */
+  .disc{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:16px}
+  .disc svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .disc.green{background:var(--green-soft);color:var(--green)}
+  .disc.gold{background:#FBEACB;color:var(--gold-deep)}
+  .disc.red{background:#FBE3E0;color:#B4442F}
+
+  /* Form fields */
+  .field{margin:0 0 16px}
+  .field label{display:block;font-weight:700;font-size:.9rem;color:var(--green-deep);margin-bottom:6px}
+  .pw-wrap{position:relative;display:flex;align-items:center}
+  .pw-wrap input{
+    width:100%;font:inherit;font-size:1rem;color:var(--ink);
+    padding:12px 46px 12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .pw-wrap input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(62,124,60,.18)}
+  .pw-wrap input[aria-invalid="true"]{border-color:#C0392B;box-shadow:0 0 0 3px rgba(192,57,43,.15)}
+  .pw-toggle{
+    position:absolute;right:6px;border:none;background:transparent;cursor:pointer;
+    width:38px;height:38px;border-radius:9px;display:grid;place-items:center;color:var(--ink-soft);
+  }
+  .pw-toggle:hover{background:var(--green-soft);color:var(--green-deep)}
+  .pw-toggle:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .pw-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* Strength meter */
+  .meter{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin:10px 0 4px}
+  .meter i{display:block;height:100%;width:0;border-radius:999px;transition:width .2s ease, background .2s ease}
+  .meter-label{font-size:.8rem;color:var(--ink-soft);min-height:1.1em}
+
+  .hint{font-size:.82rem;color:var(--ink-soft);margin-top:6px}
+  .err{font-size:.85rem;color:#B4442F;font-weight:600;margin-top:8px;min-height:1.1em}
+  .err:empty{margin-top:0}
+
+  .btn-primary[disabled]{opacity:.55;cursor:not-allowed;transform:none}
+  .btn-block{display:block;width:100%;text-align:center;border:none}
+  .btn-secondary{
+    display:inline-block;margin-top:14px;background:transparent;color:var(--green-deep);
+    font-weight:700;font-size:.9rem;text-decoration:none;
+  }
+  .btn-secondary:hover{text-decoration:underline}
+
+  /* Spinner */
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--green-soft);border-top-color:var(--green);animation:sp .8s linear infinite;margin:6px 0 14px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spin{animation:none}[data-state].is-active{animation:none}}
+
+  .success-actions{margin-top:22px}
+  .fineprint{font-size:.82rem;color:var(--ink-soft);margin-top:16px}
+</style>
+</head>
+<body>
+
+<div class="notice">Official support site for the <strong>FarmFlow</strong> Android app · operated by Civil Digital</div>
+
+<header class="subhero">
+  <div class="wrap">
+    <div class="crumb"><a href="https://farmflow.civildigital.co.uk/">← FarmFlow Home</a></div>
+    <h1 id="pageHeading">FarmFlow account</h1>
+    <p id="pageSub">Securely complete the action from your FarmFlow email.</p>
+  </div>
+</header>
+<svg class="fields-sm" viewBox="0 0 1440 44" preserveAspectRatio="none" aria-hidden="true">
+  <rect width="1440" height="44" fill="#3E7C3C"/>
+  <path d="M720 0 L590 44 L850 44 Z" fill="#5C4025"/>
+  <path d="M720 0 L340 44 L480 44 Z" fill="#4C8A3F"/>
+  <path d="M720 0 L960 44 L1100 44 Z" fill="#4C8A3F"/>
+  <path d="M720 0 L0 36 L0 44 L200 44 Z" fill="#3B6E33"/>
+  <path d="M720 0 L1440 36 L1440 44 L1240 44 Z" fill="#3B6E33"/>
+  <rect y="41" width="1440" height="3" fill="#FAF6ED"/>
+</svg>
+
+<main class="auth-main">
+  <div class="auth-card">
+
+    <!-- ===== Loading / verifying the link ===== -->
+    <section data-state="loading" class="is-active" aria-live="polite">
+      <div class="spin" role="status" aria-label="Checking your link"></div>
+      <h2>Checking your link…</h2>
+      <p class="auth-lede">One moment while we securely verify this link.</p>
+    </section>
+
+    <!-- ===== Password reset — form ===== -->
+    <section data-state="reset-form" aria-labelledby="resetTitle">
+      <div class="disc green" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      </div>
+      <h2 id="resetTitle">Choose a new password</h2>
+      <p class="auth-lede">for <span class="auth-email" id="resetEmail">your account</span></p>
+
+      <form id="resetForm" novalidate>
+        <div class="field">
+          <label for="pw1">New password</label>
+          <div class="pw-wrap">
+            <input id="pw1" name="newPassword" type="password" autocomplete="new-password"
+                   inputmode="text" aria-describedby="pwHint" required minlength="8">
+            <button type="button" class="pw-toggle" data-toggle="pw1" aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" class="eye"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
+          <div class="meter-label" id="meterLabel" aria-live="polite"></div>
+          <p class="hint" id="pwHint">Use at least 8 characters. A mix of letters, numbers and symbols is stronger.</p>
+        </div>
+
+        <div class="field">
+          <label for="pw2">Confirm new password</label>
+          <div class="pw-wrap">
+            <input id="pw2" name="confirmPassword" type="password" autocomplete="new-password" required>
+            <button type="button" class="pw-toggle" data-toggle="pw2" aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" class="eye"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <p class="err" id="resetErr" role="alert" aria-live="assertive"></p>
+        </div>
+
+        <button type="submit" id="resetSubmit" class="btn-primary btn-block" disabled>Update password</button>
+      </form>
+    </section>
+
+    <!-- ===== Password reset — success ===== -->
+    <section data-state="reset-done" aria-labelledby="resetDoneTitle">
+      <div class="disc green" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2 id="resetDoneTitle">Password updated</h2>
+      <p class="auth-lede">Your FarmFlow password has been changed. Open the FarmFlow app and sign in with your new password.</p>
+      <div class="success-actions">
+        <a id="resetContinue" class="btn-primary btn-block" href="#">Open FarmFlow</a>
+      </div>
+      <p class="fineprint">You can now close this tab.</p>
+    </section>
+
+    <!-- ===== Email verified — success ===== -->
+    <section data-state="verify-done" aria-labelledby="verifyDoneTitle">
+      <div class="disc green" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+      </div>
+      <h2 id="verifyDoneTitle">Email verified</h2>
+      <p class="auth-lede"><span class="auth-email" id="verifyEmail">Your email</span> is now verified. Open FarmFlow to continue — your verified badge updates automatically.</p>
+      <div class="success-actions">
+        <a id="verifyContinue" class="btn-primary btn-block" href="#">Open FarmFlow</a>
+      </div>
+      <p class="fineprint">You can now close this tab.</p>
+    </section>
+
+    <!-- ===== Recover email — success ===== -->
+    <section data-state="recover-done" aria-labelledby="recoverDoneTitle">
+      <div class="disc gold" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.36 2.64L3 8"/><path d="M3 3v5h5"/></svg>
+      </div>
+      <h2 id="recoverDoneTitle">Sign-in email restored</h2>
+      <p class="auth-lede">The email address on your FarmFlow account has been restored to <span class="auth-email" id="recoverEmail">your previous email</span>. As a precaution, we recommend resetting your password.</p>
+      <div class="success-actions">
+        <a class="btn-primary btn-block" href="https://farmflow.civildigital.co.uk/">Back to FarmFlow</a>
+      </div>
+    </section>
+
+    <!-- ===== Invalid / expired link ===== -->
+    <section data-state="invalid" aria-labelledby="invalidTitle">
+      <div class="disc red" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+      </div>
+      <h2 id="invalidTitle">This link can’t be used</h2>
+      <p class="auth-lede" id="invalidMsg">This link is invalid or has already been used. Reset and verification links also expire for your security.</p>
+      <div class="success-actions">
+        <p class="hint" id="invalidHint">Open the FarmFlow app and request a new link — for a password, tap “Forgot password?”; to verify your email, use “Resend verification email”.</p>
+        <a class="btn-gold btn-block" style="margin-top:14px" href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">Open FarmFlow on Google Play</a>
+      </div>
+    </section>
+
+    <!-- ===== Generic landing (no/unknown action) ===== -->
+    <section data-state="landing" aria-labelledby="landingTitle">
+      <div class="disc green" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg>
+      </div>
+      <h2 id="landingTitle">Secure account links</h2>
+      <p class="auth-lede">This page completes secure actions from FarmFlow emails, such as resetting your password or verifying your email. Open the link straight from your FarmFlow email, or manage your account from the app.</p>
+      <div class="success-actions">
+        <a class="btn-primary btn-block" href="https://farmflow.civildigital.co.uk/">Back to FarmFlow</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site">
+  <div class="foot">
+    <div>
+      <div class="brand">FarmFlow</div>
+      <div>Grow. List. Trade.</div>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms &amp; Conditions</a>
+      <a href="/help/">Help</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+    <div class="legal">FarmFlow is operated by Civil Digital · © 2026 Civil Digital. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Firebase Web config (public client key). Edit /assets/firebase-config.js once. -->
+<script src="/assets/firebase-config.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth, verifyPasswordResetCode, confirmPasswordReset,
+    applyActionCode, checkActionCode
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  /* ---------- helpers ---------- */
+  const qs  = (s, r = document) => r.querySelector(s);
+  const params = new URLSearchParams(location.search);
+  const mode        = params.get("mode");
+  const oobCode     = params.get("oobCode");
+  const urlApiKey   = params.get("apiKey");
+  const continueUrl = params.get("continueUrl");
+  const PLAY_URL    = "https://play.google.com/store/apps/details?id=com.civildigital.farmflow";
+
+  function show(state){
+    document.querySelectorAll("[data-state]").forEach(el =>
+      el.classList.toggle("is-active", el.getAttribute("data-state") === state));
+  }
+  function setHeading(title, sub){
+    if (title) qs("#pageHeading").textContent = title;
+    if (sub)   qs("#pageSub").textContent = sub;
+  }
+  /* Only allow a continue target on our own subdomain (or the Play Store). */
+  function safeContinue(fallback){
+    if (continueUrl){
+      try{
+        const u = new URL(continueUrl, location.origin);
+        if (u.hostname === "farmflow.civildigital.co.uk") return u.href;
+      }catch(e){/* ignore */}
+    }
+    return fallback || PLAY_URL;
+  }
+  function showInvalid(msg, hint){
+    if (msg)  qs("#invalidMsg").textContent = msg;
+    if (hint) qs("#invalidHint").textContent = hint;
+    show("invalid");
+  }
+
+  /* ---------- Firebase init ---------- */
+  const cfg = Object.assign({}, window.FARMFLOW_FIREBASE_CONFIG || {});
+  // Every Firebase email link carries the project's apiKey — prefer it at runtime so the
+  // handler works even before the Web key is pasted into firebase-config.js.
+  if (urlApiKey) cfg.apiKey = urlApiKey;
+
+  let auth;
+  try {
+    if (!cfg.apiKey || cfg.apiKey.indexOf("PASTE_") === 0) throw new Error("missing-api-key");
+    auth = getAuth(initializeApp(cfg));
+  } catch (e) {
+    showInvalid(
+      "This page isn’t configured yet. If you’re the site owner, add the Firebase Web config in /assets/firebase-config.js.",
+      "Once configured, open the link from your FarmFlow email again."
+    );
+  }
+
+  /* ---------- password strength ---------- */
+  function strength(pw){
+    let s = 0;
+    if (pw.length >= 8) s++;
+    if (pw.length >= 12) s++;
+    if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) s++;
+    if (/\d/.test(pw)) s++;
+    if (/[^A-Za-z0-9]/.test(pw)) s++;
+    return Math.min(s, 4); // 0..4
+  }
+  const STR = [
+    {w:"0%",  c:"var(--line)",  t:""},
+    {w:"28%", c:"#C0392B",      t:"Weak"},
+    {w:"55%", c:"#E0902B",      t:"Fair"},
+    {w:"80%", c:"#4C8A3F",      t:"Good"},
+    {w:"100%",c:"var(--green)", t:"Strong"}
+  ];
+
+  /* ---------- reset form wiring ---------- */
+  function wireResetForm(email){
+    qs("#resetEmail").textContent = email || "your account";
+    const pw1 = qs("#pw1"), pw2 = qs("#pw2"),
+          fill = qs("#meterFill"), label = qs("#meterLabel"),
+          err = qs("#resetErr"), submit = qs("#resetSubmit"),
+          form = qs("#resetForm");
+
+    // show/hide toggles
+    document.querySelectorAll(".pw-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const input = qs("#" + btn.dataset.toggle);
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        btn.setAttribute("aria-pressed", String(!showing));
+        btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      });
+    });
+
+    function validate(){
+      const a = pw1.value, b = pw2.value;
+      const lvl = strength(a);
+      fill.style.width = a ? STR[lvl].w : "0%";
+      fill.style.background = STR[lvl].c;
+      label.textContent = a ? STR[lvl].t : "";
+      let msg = "";
+      if (a && a.length < 8) msg = "Use at least 8 characters.";
+      else if (b && a !== b) msg = "Passwords don’t match.";
+      err.textContent = msg;
+      const ok = a.length >= 8 && a === b;
+      pw2.setAttribute("aria-invalid", String(!!b && a !== b));
+      submit.disabled = !ok;
+      return ok;
+    }
+    pw1.addEventListener("input", validate);
+    pw2.addEventListener("input", validate);
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      submit.disabled = true; submit.textContent = "Updating…";
+      try {
+        await confirmPasswordReset(auth, oobCode, pw1.value);
+        qs("#resetContinue").setAttribute(
+          "href", safeContinue("https://farmflow.civildigital.co.uk/auth/continue?flow=reset"));
+        show("reset-done");
+        qs("#resetContinue").focus();
+      } catch (err2) {
+        submit.disabled = false; submit.textContent = "Update password";
+        if (err2 && (err2.code === "auth/weak-password")) {
+          qs("#resetErr").textContent = "That password is too weak — please choose a stronger one.";
+        } else {
+          showInvalid(
+            "We couldn’t update your password — this link may have expired or already been used.",
+            "Open the FarmFlow app and tap “Forgot password?” to get a fresh link.");
+        }
+      }
+    });
+    show("reset-form");
+    pw1.focus();
+  }
+
+  /* ---------- route by mode ---------- */
+  async function run(){
+    if (!auth) return;                 // config error already surfaced
+    if (!mode || !oobCode){ show("landing"); return; }
+
+    if (mode === "resetPassword"){
+      setHeading("Reset your password", "Choose a new password for your FarmFlow account.");
+      try {
+        const email = await verifyPasswordResetCode(auth, oobCode);
+        wireResetForm(email);
+      } catch (e){
+        showInvalid();
+      }
+      return;
+    }
+
+    if (mode === "verifyEmail"){
+      setHeading("Verify your email", "Confirming your FarmFlow email address.");
+      try {
+        let email = "";
+        try { const info = await checkActionCode(auth, oobCode); email = info?.data?.email || ""; } catch(_){}
+        await applyActionCode(auth, oobCode);
+        if (email) qs("#verifyEmail").textContent = email;
+        qs("#verifyContinue").setAttribute(
+          "href", safeContinue("https://farmflow.civildigital.co.uk/auth/continue?flow=verify"));
+        show("verify-done");
+        qs("#verifyContinue").focus();
+      } catch (e){
+        showInvalid(
+          "This verification link is invalid or has expired.",
+          "Open FarmFlow and use “Resend verification email” to get a new one.");
+      }
+      return;
+    }
+
+    if (mode === "recoverEmail"){
+      setHeading("Restore your email", "Reversing a recent email change on your account.");
+      try {
+        const info = await checkActionCode(auth, oobCode);
+        const email = info?.data?.email || "";
+        await applyActionCode(auth, oobCode);
+        if (email) qs("#recoverEmail").textContent = email;
+        show("recover-done");
+      } catch (e){
+        showInvalid(
+          "This link is invalid or has already been used.",
+          "If you didn’t request this, reset your password from the FarmFlow app straight away.");
+      }
+      return;
+    }
+
+    // Unknown mode
+    show("landing");
+  }
+
+  run();
+</script>
+</body>
+</html>

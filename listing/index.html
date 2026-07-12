@@ -44,6 +44,7 @@
     }
     .btn--ff-outline:hover { background: var(--ff-green-tint); }
     .ff-note { color: var(--muted); font-size: var(--fs-300); margin-top: var(--sp-5); }
+    .ff-name { font-size: 1.4rem; font-weight: 800; color: var(--ff-green); margin: 0 0 var(--sp-1); overflow-wrap: anywhere; }
     .ff-id { color: var(--muted); font-size: var(--fs-300); word-break: break-all; }
   </style>
 </head>
@@ -71,6 +72,7 @@
 
         <div class="ff-card">
           <p style="margin:0 0 var(--sp-2);font-weight:700">Ready to view this listing?</p>
+          <p class="ff-name" id="ff-listing-name" hidden></p>
           <p class="ff-id" id="ff-listing-id"></p>
           <div class="ff-actions">
             <!-- Set by JS to an Android intent: URL that opens the app if installed, else falls back
@@ -103,23 +105,42 @@
       var PACKAGE = "com.civildigital.farmflow";
       var PLAY_URL = "https://play.google.com/store/apps/details?id=" + PACKAGE;
 
-      // The listing id arrives either as a ?id= query param (when 404.html forwards a
-      // /listing/{id} path here) or as the last path segment if this page is reached directly.
-      function listingId() {
-        var q = new URLSearchParams(location.search).get("id");
-        if (q) return q.trim();
-        var parts = location.pathname.split("/").filter(Boolean); // ["listing","{id}"]
+      var params = new URLSearchParams(location.search);
+      function pathSlug() {
+        var parts = location.pathname.split("/").filter(Boolean); // e.g. ["listing","{slug-or-id}"]
         var i = parts.indexOf("listing");
-        if (i >= 0 && parts[i + 1]) return decodeURIComponent(parts[i + 1]);
-        return "";
+        return (i >= 0 && parts[i + 1]) ? decodeURIComponent(parts[i + 1]) : "";
+      }
+
+      // The real listing id resolves the listing. It arrives as ?id= (new links /listing/{slug}?id={id}
+      // forwarded here by 404.html, or the app's own links). As a legacy fallback the id may be the
+      // last path segment if this page is reached directly at /listing/{id}.
+      function listingId() {
+        var q = params.get("id");
+        if (q) return q.trim();
+        return pathSlug();
+      }
+
+      // Human-readable produce name (cosmetic). Comes from the ?name= slug that 404.html carries over,
+      // or the path slug when the page is reached directly. Turned back into words for display.
+      function displayName() {
+        var slug = (params.get("name") || "").trim();
+        // Only treat a path slug as a name when it is NOT doubling as the id (i.e. an ?id= exists).
+        if (!slug && params.get("id")) slug = pathSlug();
+        if (!slug) return "";
+        return slug.replace(/-+/g, " ").trim().replace(/\b\w/g, function (c) { return c.toUpperCase(); });
       }
 
       var id = listingId();
       var idEl = document.getElementById("ff-listing-id");
-      if (id) {
-        idEl.textContent = "Listing reference: " + id;
-      } else {
-        idEl.textContent = "";
+      idEl.textContent = id ? "Listing reference: " + id : "";
+
+      var name = displayName();
+      var nameEl = document.getElementById("ff-listing-name");
+      if (name) {
+        nameEl.textContent = name;
+        nameEl.removeAttribute("hidden");
+        document.title = name + " — FarmFlow";
       }
 
       // On Android, offer a one-tap "open app, else Play Store" via an intent: URL. The custom scheme

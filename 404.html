@@ -5,14 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
   // Deep-link router. GitHub Pages serves this 404 page for any unmatched path. Shared FarmFlow
-  // listing links (/listing/{id} — or legacy /farmflow/listing/{id} redirected from the old
-  // civildigital.co.uk/farmflow location) have no static file, so forward them to the listing
-  // landing page carrying the id as a query param. Runs before render (location.replace, no history
-  // entry, no flash). All other 404s fall through to the normal "page not found" content below.
+  // listing links now look like /listing/{name-slug}?id={id} — the path segment is the readable
+  // produce name and ?id= carries the real listing id. There is no static file at that path, so
+  // forward to the /listing/ landing page preserving the id (for resolution) and the name slug (for
+  // display). Legacy links that put the id straight in the path (/listing/{id}, or the old
+  // /farmflow/listing/{id}) have no ?id=, so fall back to using the path segment as the id. Runs
+  // before render (location.replace, no history entry, no flash). All other 404s fall through to the
+  // normal "page not found" content below.
   (function () {
-    var m = location.pathname.match(/^\/(?:farmflow\/)?listing\/(.+?)\/?$/);
+    var m = location.pathname.match(/^\/(?:farmflow\/)?listing\/([^/]+)\/?$/);
     if (m && m[1]) {
-      location.replace("/listing/?id=" + encodeURIComponent(decodeURIComponent(m[1])));
+      var qId = new URLSearchParams(location.search).get("id");
+      var slug = decodeURIComponent(m[1]);
+      var id = qId || slug;                 // new links: ?id=; legacy links: id is the path segment
+      var to = "/listing/?id=" + encodeURIComponent(id);
+      if (qId) to += "&name=" + encodeURIComponent(slug);   // only a slug (not a raw id) is display-worthy
+      location.replace(to);
     }
   })();
 </script>

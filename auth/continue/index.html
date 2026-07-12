@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All set · FarmFlow</title>
+<meta name="description" content="Your FarmFlow account action is complete. Open the FarmFlow app to continue.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3E7C3C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<link rel="icon" href="/images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/farmflow.css">
+<style>
+  .auth-main{min-height:60vh;display:flex;align-items:flex-start;justify-content:center;padding:0 20px 64px}
+  .auth-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-lift);width:100%;max-width:460px;margin-top:-46px;padding:34px 30px 30px;
+    position:relative;z-index:2;text-align:center}
+  .disc{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin:0 auto 16px;
+    background:var(--green-soft);color:var(--green)}
+  .disc svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .auth-card h2{font-size:1.42rem;margin:0 0 8px}
+  .auth-card p.lede{color:var(--ink-soft);font-size:.95rem;margin:0 0 22px}
+  .btn-block{display:block;width:100%;text-align:center;border:none}
+  .fineprint{font-size:.82rem;color:var(--ink-soft);margin-top:14px}
+</style>
+</head>
+<body>
+
+<div class="notice">Official support site for the <strong>FarmFlow</strong> Android app · operated by Civil Digital</div>
+
+<header class="subhero">
+  <div class="wrap">
+    <div class="crumb"><a href="https://farmflow.civildigital.co.uk/">← FarmFlow Home</a></div>
+    <h1>You’re all set</h1>
+    <p>Return to the FarmFlow app to continue.</p>
+  </div>
+</header>
+<svg class="fields-sm" viewBox="0 0 1440 44" preserveAspectRatio="none" aria-hidden="true">
+  <rect width="1440" height="44" fill="#3E7C3C"/>
+  <path d="M720 0 L590 44 L850 44 Z" fill="#5C4025"/>
+  <path d="M720 0 L340 44 L480 44 Z" fill="#4C8A3F"/>
+  <path d="M720 0 L960 44 L1100 44 Z" fill="#4C8A3F"/>
+  <path d="M720 0 L0 36 L0 44 L200 44 Z" fill="#3B6E33"/>
+  <path d="M720 0 L1440 36 L1440 44 L1240 44 Z" fill="#3B6E33"/>
+  <rect y="41" width="1440" height="3" fill="#FAF6ED"/>
+</svg>
+
+<main class="auth-main">
+  <div class="auth-card">
+    <div class="disc" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h2 id="title">You’re all set</h2>
+    <p class="lede" id="lede">Open the FarmFlow app to continue.</p>
+    <a class="btn-primary btn-block" href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">Open FarmFlow on Google Play</a>
+    <p class="fineprint">If FarmFlow is installed, this page normally opens straight in the app. You can close this tab.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="foot">
+    <div>
+      <div class="brand">FarmFlow</div>
+      <div>Grow. List. Trade.</div>
+    </div>
+    <nav aria-label="Footer">
+      <a href="/privacy/">Privacy Policy</a>
+      <a href="/terms/">Terms &amp; Conditions</a>
+      <a href="/help/">Help</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+    <div class="legal">FarmFlow is operated by Civil Digital · © 2026 Civil Digital. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Tailor the message to the flow (?flow=reset|verify). This browser fallback only shows when the
+  // FarmFlow App Link didn't capture the URL (app not installed / links not verified yet).
+  var flow = new URLSearchParams(location.search).get("flow");
+  if (flow === "reset") {
+    document.getElementById("title").textContent = "Password updated";
+    document.getElementById("lede").textContent = "Your password has been changed. Open FarmFlow and sign in with your new password.";
+  } else if (flow === "verify") {
+    document.getElementById("title").textContent = "Email verified";
+    document.getElementById("lede").textContent = "Your email is verified. Open FarmFlow to continue — your verified status updates automatically.";
+  }
+</script>
+</body>
+</html>
