@@ -32,7 +32,7 @@
 </svg>
 
 <main class="wrap-narrow page prose">
-  <p class="meta-line">Effective date: 11 July 2026 · Version 1.1 · Applies to the FarmFlow Android app and this website</p>
+  <p class="meta-line">Effective date: 27 July 2026 · Version 1.2 · Applies to the FarmFlow Android app and this website</p>
 
   <h2>1. Who we are</h2>
   <p>FarmFlow is an agricultural marketplace app for the Caribbean, operated by <strong>Civil Digital</strong> ("we", "us"). We are the data controller for personal data processed through FarmFlow. You can reach us at <a href="mailto:info@civildigital.co.uk">info@civildigital.co.uk</a>.</p>
@@ -43,7 +43,7 @@
     <tr><td>Name, email address, and sign-in identifier (email, Google, or Facebook)</td><td>When you create an account</td><td>To create and secure your account</td></tr>
     <tr><td>Profile town (island and town name)</td><td>When you set your profile location</td><td>To show you nearby listings and show buyers roughly where sellers are</td></tr>
     <tr><td>Approximate device location (coarse, one-time)</td><td>Only if you grant location permission</td><td>To suggest your nearest town, we make a single coarse (approximate) location check. This is an area-level estimate, not precise GPS tracking. We do not store your coordinates or track your movements — only the town you confirm is saved</td></tr>
-    <tr><td>Listings, photos, and messages</td><td>When you list items or chat with other users</td><td>To operate the marketplace and keep it safe</td></tr>
+    <tr><td>Listings, photos, and messages</td><td>When you list items or chat with other users</td><td>To operate the marketplace and keep it safe. Section 3 explains how photos are processed, what is removed from them, and how long they are kept</td></tr>
     <tr><td>Marketing consent records</td><td>If you opt in to marketing emails</td><td>To prove your consent, including the wording you agreed to and when</td></tr>
     <tr><td>Purchase records (donations)</td><td>If you make an optional donation through Google Play Billing</td><td>To confirm and record your Google Play purchase. Donations are processed by Google Play Billing — we never see your card details</td></tr>
     <tr><td>Verification documents</td><td>If you apply to the Verified Seller Programme</td><td>To confirm your identity and regulatory compliance for restricted categories</td></tr>
@@ -52,14 +52,39 @@
     <tr><td>Device and diagnostic data</td><td>Automatically</td><td>To fix crashes, prevent abuse, and keep the service reliable</td></tr>
   </table>
 
-  <h2>3. Advertising</h2>
+  <h2>3. Photos and images</h2>
+  <p><strong>What we store.</strong> When you add a profile photo or a photo to a listing, the image is stored in Firebase Cloud Storage, operated by Google on our behalf. We store only the versions described below — we do not keep the original file from your device.</p>
+
+  <p><strong>Images are compressed before they are stored.</strong> Your photo is processed on your own device before it is uploaded. We reduce its dimensions and re-encode it, so what leaves your phone is a smaller image than the one your camera produced:</p>
+  <ul>
+    <li>profile photos are resized to a maximum of 1024 pixels on the longest edge;</li>
+    <li>listing photos are resized to a maximum of 1600 pixels on the longest edge, which keeps enough detail to zoom in on a listing.</li>
+  </ul>
+
+  <p><strong>Thumbnails are created automatically.</strong> For every listing photo we also create a small preview image (about 300 pixels on the longest edge). Search results, listing cards, favourites and seller pages show this preview; the larger image is downloaded only when you open the listing itself. No separate upload or action is needed from you — the preview is generated from the photo you provide.</p>
+
+  <p><strong>Unnecessary image metadata is removed.</strong> Photo files often carry hidden information such as the date and time, camera and phone model, and — where your camera records it — the GPS coordinates of where the picture was taken. Because we re-encode your photo from its raw image data, none of that information is carried into the file we store. The only orientation information is applied to the image itself, so your photo appears the right way up. Only the picture is stored.</p>
+
+  <p><strong>Why we process images this way.</strong> Compression, resizing and thumbnails exist to make FarmFlow faster to use, to reduce the amount of mobile data you spend browsing the marketplace, and to minimise the storage we hold. Removing metadata also means the hidden details in your photos are not published alongside your listing.</p>
+
+  <p><strong>Deleting a listing deletes its images.</strong> When you delete one of your listings, its photo and its thumbnail are permanently deleted from storage straight away, along with the references to them. You can delete your own listings, and their images, at any time from My Listings.</p>
+
+  <p><strong>Expired listings.</strong> If a listing expires and is not renewed, we keep its images for up to 90 days so that you can renew the listing and keep its photo. After 90 days the images, thumbnails and their stored references are permanently deleted. This happens automatically.</p>
+
+  <p><strong>Removing unused images.</strong> We run regular automated checks that permanently delete stored images that are no longer attached to a listing or an account, so image files are not retained after the content they belonged to has gone.</p>
+
+  <p><strong>Replacing your profile photo.</strong> You have one active profile photo. Uploading a new one replaces the previous image, which is permanently deleted — we do not keep a history of your previous photos.</p>
+
+  <p><strong>Photos from social sign-in.</strong> If you sign in with Facebook or Google and we show your profile picture from that account, that image is served by the provider and is not copied into our storage. It is governed by that provider's own privacy policy. Removing it is done through your account with that provider, or by uploading your own photo to FarmFlow instead.</p>
+
+  <h2>4. Advertising</h2>
   <p>FarmFlow shows advertising provided by Google AdMob. When ads are shown, Google may process your device's advertising ID to serve and measure ads. You can reset or delete your advertising ID in your device's Google settings. See <a href="https://policies.google.com/technologies/ads" rel="noopener">Google's advertising policies</a> for details.</p>
   <p>If you are in the UK or the European Economic Area (EEA), we ask for your consent before showing personalised ads, using Google's consent management (UMP) prompt. You can change or withdraw your choice at any time from the app's <strong>Settings → Manage ad consent</strong> option, which re-opens the same consent form.</p>
 
-  <h2>4. Marketing emails</h2>
+  <h2>5. Marketing emails</h2>
   <p>We only send marketing emails to people who have opted in. Marketing is never on by default — you choose to receive it. If you opt in, you can withdraw your consent and unsubscribe at any time, either from the link in any marketing email or by emailing <a href="mailto:info@civildigital.co.uk">info@civildigital.co.uk</a>. Transactional messages that are part of the service (for example, a listing being approved) are not marketing and are always sent while your account is active.</p>
 
-  <h2>5. What we never do</h2>
+  <h2>6. What we never do</h2>
   <ul>
     <li>We do not sell your personal data.</li>
     <li>We do not track your precise or continuous location.</li>
@@ -67,10 +92,10 @@
     <li>We do not send marketing emails without your opt-in consent.</li>
   </ul>
 
-  <h2>6. Payments</h2>
+  <h2>7. Payments</h2>
   <p>Buyer–seller transactions take place directly between users, outside the app; we do not process or hold those payments. Optional donations are processed by Google Play Billing. Fees for boosts and the Verified Seller Programme are arranged directly with us and processed by our payment provider (Stripe); their processing is governed by <a href="https://stripe.com/privacy" rel="noopener">Stripe's privacy policy</a>.</p>
 
-  <h2>7. Who we share data with</h2>
+  <h2>8. Who we share data with</h2>
   <ul>
     <li><strong>Service providers</strong> — Google (account sign-in, our backend and hosting infrastructure, analytics via Google Analytics, push notifications, Google Play Billing, and AdMob advertising), Stripe (payments), and our email delivery provider, each processing data only on our instructions.</li>
     <li><strong>Other users</strong> — your display name, profile town, and listings are visible to other users; your email address is not.</li>
@@ -78,16 +103,16 @@
     <li><strong>Authorities</strong> — where required by law or to protect users from serious harm.</li>
   </ul>
 
-  <h2>8. How long we keep data</h2>
-  <p>We keep your data while your account is active. When you delete your account, personal data is deleted or anonymised promptly, except records we must keep longer for legal, security, or accounting reasons (for example, purchase ledgers and consent logs). Details of what is removed are on our <a href="/account-deletion/">Account &amp; Data Deletion</a> page.</p>
+  <h2>9. How long we keep data</h2>
+  <p>We keep your data while your account is active. When you delete your account, personal data is deleted or anonymised promptly, except records we must keep longer for legal, security, or accounting reasons (for example, purchase ledgers and consent logs). Details of what is removed are on our <a href="/account-deletion/">Account &amp; Data Deletion</a> page. Photos and images have their own retention rules, set out in section 3 above.</p>
 
-  <h2>9. Your rights</h2>
+  <h2>10. Your rights</h2>
   <p>Under the Data Protection Act, 2020 (Jamaica) and the Data Protection Act, Chap. 22:04 (Trinidad &amp; Tobago), you have rights to access, correct, and delete your personal data, and to withdraw consent (such as marketing consent) at any time. To exercise any right, email <a href="mailto:info@civildigital.co.uk">info@civildigital.co.uk</a>. You may also complain to your local data protection authority: the Office of the Information Commissioner (Jamaica) or the Office of the Information Commissioner (Trinidad &amp; Tobago).</p>
 
-  <h2>10. Children</h2>
+  <h2>11. Children</h2>
   <p>FarmFlow is for adults aged 18 and over. We do not knowingly collect data from anyone under 18; if we learn we have, we will delete it.</p>
 
-  <h2>11. Changes to this policy</h2>
+  <h2>12. Changes to this policy</h2>
   <p>If we change this policy materially, we'll notify you in the app before the change takes effect. Each version is dated and numbered at the top of this page.</p>
 
   <div class="related">
