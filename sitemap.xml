@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://farmflow.civildigital.co.uk/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/help/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/faqs/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/privacy/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/terms/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/prohibited-items/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/safety/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/community-guidelines/</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/account-deletion/</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://farmflow.civildigital.co.uk/verified-sellers/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <url><loc>https://farmflow.civildigital.co.uk/jamaica/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/trinidad-and-tobago/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/barbados/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/guyana/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <url><loc>https://farmflow.civildigital.co.uk/produce/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/ground-provisions/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/yam/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/cassava/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/scotch-bonnet/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/callaloo/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/produce/plantain/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <url><loc>https://farmflow.civildigital.co.uk/guides/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/guides/what-are-ground-provisions/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/guides/how-to-sell-yam-online-in-jamaica/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <url><loc>https://farmflow.civildigital.co.uk/help/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/faqs/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/contact/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/privacy/</loc><lastmod>2026-07-27</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/terms/</loc><lastmod>2026-07-07</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/prohibited-items/</loc><lastmod>2026-07-07</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/safety/</loc><lastmod>2026-08-01</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/community-guidelines/</loc><lastmod>2026-08-01</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/account-deletion/</loc><lastmod>2026-08-01</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://farmflow.civildigital.co.uk/verified-sellers/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

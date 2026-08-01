@@ -53,6 +53,27 @@ img,svg{max-width:100%}
 .notice strong{color:#fff;font-weight:700}
 .notice a{color:#fff}
 
+/* ---------- top nav ---------- */
+.topnav{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+.topnav-wrap{
+  max-width:1080px;margin:0 auto;padding:10px 20px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;
+}
+.topnav-brand{
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+  color:var(--green-deep);text-decoration:none;font-size:1.05rem;
+  margin-right:auto;
+}
+.topnav-links{display:flex;flex-wrap:wrap;gap:4px 16px}
+.topnav-links a{
+  color:var(--ink-soft);text-decoration:none;font-size:.86rem;font-weight:600;
+  padding:4px 2px;border-bottom:2px solid transparent;
+}
+.topnav-links a:hover,.topnav-links a:focus-visible{color:var(--green-deep);border-bottom-color:var(--gold)}
+
 /* ---------- home hero ---------- */
 .hero{
   background:var(--green);
@@ -163,6 +184,55 @@ img,svg{max-width:100%}
 .tile h3{font-size:1.06rem;font-weight:700}
 .tile p{font-size:.88rem;color:var(--ink-soft);flex:1}
 .tile .go{font-size:.82rem;font-weight:700;color:var(--green);letter-spacing:.02em}
+
+/* ---------- produce category grid (home) ---------- */
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
+}
+.cat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:18px 16px;text-align:center;
+  text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.cat-card:hover,.cat-card:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
+.cat-card .emoji{font-size:1.8rem;line-height:1}
+.cat-card .label{font-weight:700;font-size:.92rem;color:var(--green-deep)}
+.cat-card .sub{font-size:.78rem;color:var(--ink-soft)}
+
+/* ---------- numbered steps (how it works) ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin:28px 0}
+.step{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 20px;
+}
+.step .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;background:var(--green-soft);
+  color:var(--green-deep);font-weight:800;font-family:"Bricolage Grotesque",sans-serif;
+  margin-bottom:12px;
+}
+.step h3{font-size:1.02rem;margin-bottom:6px}
+.step p{font-size:.9rem;color:var(--ink-soft)}
+
+/* ---------- islands row ---------- */
+.islands-row{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 8px}
+.island-pill{
+  background:var(--green-soft);color:var(--green-deep);text-decoration:none;
+  font-weight:700;font-size:.9rem;padding:10px 18px;border-radius:999px;
+  transition:background .15s ease, transform .15s ease;
+}
+.island-pill:hover{background:#D9E6D1;transform:translateY(-2px)}
+
+/* ---------- currency note ---------- */
+.currency-note{
+  display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;
+  font-size:.82rem;color:var(--ink-soft);
+  background:var(--green-soft);border-radius:999px;padding:8px 16px;margin:10px 0;
+}
+.currency-note strong{color:var(--green-deep)}
 
 /* ---------- callout band ---------- */
 .callout{

@@ -9,29 +9,43 @@ civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 
 ```
 /
-├── index.html                  # Tile-grid home page
-├── help.html                   # Help & Support hub
-├── faqs.html                   # FAQs (accordion via <details>)
-├── contact.html                # Contact support
-├── privacy.html                # Privacy Policy (Play Console URL)
-├── terms.html                  # Terms & Conditions
-├── prohibited-items.html       # Prohibited Items Policy
-├── safety.html                 # Buyer & seller safety tips
-├── community-guidelines.html   # Moderation policy & appeals
-├── account-deletion.html       # Account & data deletion (Play REQUIRED URL)
-├── verified-sellers.html       # Verified Seller Programme
+├── index.html                  # Marketplace-intent home page (categories, how it works, islands)
+├── jamaica/, trinidad-and-tobago/, barbados/, guyana/
+│   └── index.html              # Island landing pages (local produce + "sell online in X" intent)
+├── produce/
+│   ├── index.html              # Produce hub
+│   └── ground-provisions/, yam/, cassava/, scotch-bonnet/, callaloo/, plantain/
+│       └── index.html          # Produce-category pages
+├── guides/
+│   ├── index.html              # Guides hub
+│   └── what-are-ground-provisions/, how-to-sell-yam-online-in-jamaica/
+│       └── index.html          # Local-intent guide articles
+├── help.html / help/index.html                 # Help & Support hub
+├── faqs.html / faqs/index.html                 # FAQs (accordion via <details>, FAQPage schema)
+├── contact.html / contact/index.html           # Contact support
+├── privacy.html / privacy/index.html           # Privacy Policy (Play Console URL)
+├── terms.html / terms/index.html               # Terms & Conditions
+├── prohibited-items.html / prohibited-items/index.html
+├── safety.html / safety/index.html             # Buyer & seller safety tips
+├── community-guidelines.html / community-guidelines/index.html
+├── account-deletion.html / account-deletion/index.html   # Play REQUIRED URL
+├── verified-sellers.html / verified-sellers/index.html
 ├── listing/index.html          # Shared-listing landing page (open-in-app / Play Store)
 ├── 404.html                    # Not-found page + /listing/{slug}?id={id} deep-link router
 ├── CNAME                       # Pins the farmflow.civildigital.co.uk custom domain
-├── robots.txt / sitemap.xml
+├── robots.txt / sitemap.xml    # sitemap includes <lastmod> on every URL
 ├── .well-known/
 │   └── assetlinks.json         # Android App Links statement (see below)
-├── images/                     # Favicons + og-default.svg (used by listing page)
+├── images/                     # Favicons, og-image.png (real PNG share image), og-default.svg (legacy, unreferenced)
 └── assets/
-    ├── farmflow.css            # Shared stylesheet (all brand tokens in :root)
+    ├── farmflow.css            # Shared stylesheet — brand tokens, .topnav, .cat-grid, .steps, .islands-row
     ├── css/styles.css          # Civil Digital styles (listing page only)
     └── brand/CivilDigitalIcon.svg
 ```
+
+Every indexable page carries a self-referencing canonical, Open Graph + Twitter cards, favicon/apple-touch-icon/theme-color, and Organization+WebSite JSON-LD (`en-GB` sitewide). The homepage adds MobileApplication schema; `/faqs/` adds FAQPage schema; produce/island/guide pages add BreadcrumbList. A lightweight `.topnav` (islands, produce, guides, help, FAQs, contact) sits under the notice bar on every page so new content isn't orphaned.
+
+**Known follow-up (flagged, not fixed in this repo):** `thefarmflow.civildigital.co.uk` was found serving a 200 response alongside the canonical `farmflow.civildigital.co.uk` domain. Self-referencing canonicals mitigate the duplicate-content risk, but a proper fix (301 redirect or removing the DNS entry) needs to happen at the registrar/host level, outside this repository.
 
 ## Publish (GitHub Pages, deploy from root)
 
