@@ -1,6 +1,6 @@
-# FarmFlow Support Site — farmflow.civildigital.co.uk
+# FarmFlow Support Site — www.farmflowcaribbean.com
 
-Production static site for **farmflow.civildigital.co.uk**, published with GitHub Pages.
+Production static site for **www.farmflowcaribbean.com**, published with GitHub Pages.
 The repository root **is** the website root (no build step). Static, dependency-free branch
 site for the FarmFlow Android app, designed to sit alongside (but look nothing like)
 civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
@@ -32,7 +32,7 @@ civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 ├── verified-sellers.html / verified-sellers/index.html
 ├── listing/index.html          # Shared-listing landing page (open-in-app / Play Store)
 ├── 404.html                    # Not-found page + /listing/{slug}?id={id} deep-link router
-├── CNAME                       # Pins the farmflow.civildigital.co.uk custom domain
+├── CNAME                       # Pins the www.farmflowcaribbean.com custom domain
 ├── robots.txt / sitemap.xml    # sitemap includes <lastmod> on every URL
 ├── .well-known/
 │   └── assetlinks.json         # Android App Links statement (see below)
@@ -45,19 +45,19 @@ civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
 
 Every indexable page carries a self-referencing canonical, Open Graph + Twitter cards, favicon/apple-touch-icon/theme-color, and Organization+WebSite JSON-LD (`en-GB` sitewide). The homepage adds MobileApplication schema; `/faqs/` adds FAQPage schema; produce/island/guide pages add BreadcrumbList. A lightweight `.topnav` (islands, produce, guides, help, FAQs, contact) sits under the notice bar on every page so new content isn't orphaned.
 
-**Known follow-up (flagged, not fixed in this repo):** `thefarmflow.civildigital.co.uk` was found serving a 200 response alongside the canonical `farmflow.civildigital.co.uk` domain. Self-referencing canonicals mitigate the duplicate-content risk, but a proper fix (301 redirect or removing the DNS entry) needs to happen at the registrar/host level, outside this repository.
+**Known follow-up (flagged, not fixed in this repo):** `thewww.farmflowcaribbean.com` was found serving a 200 response alongside the canonical `www.farmflowcaribbean.com` domain. Self-referencing canonicals mitigate the duplicate-content risk, but a proper fix (301 redirect or removing the DNS entry) needs to happen at the registrar/host level, outside this repository.
 
 ## Publish (GitHub Pages, deploy from root)
 
 1. Create/point a GitHub repo and push this branch (`main`).
 2. **Settings → Pages → Build and deployment → Deploy from a branch → `main` / `/ (root)`**.
-3. **Settings → Pages → Custom domain:** `farmflow.civildigital.co.uk` (already pinned by the `CNAME` file).
+3. **Settings → Pages → Custom domain:** `www.farmflowcaribbean.com` (already pinned by the `CNAME` file).
 4. **DNS** at your registrar: `farmflow` as `CNAME` → `<github-user>.github.io`.
 5. Enable **Enforce HTTPS** once the certificate provisions.
 
 ## Listing deep links
 
-The app shares listings as `https://farmflow.civildigital.co.uk/listing/{name-slug}?id={listingId}` —
+The app shares listings as `https://www.farmflowcaribbean.com/listing/{name-slug}?id={listingId}` —
 pointed **directly** at this subdomain (no main-domain redirect). The path segment is a human-readable
 slug of the listing name (what recipients see); `?id=` carries the real listing id, which is what
 resolves the listing (names are not unique). That path has no static file, so `404.html` forwards it to
@@ -68,12 +68,15 @@ to treating the path segment as the id when no `?id=` is present.
 
 ## `.well-known/assetlinks.json`
 
-Android App Links statement for `com.civildigital.farmflow`. The app's **listing share** App Link now
-verifies against **farmflow.civildigital.co.uk**, so this file must stay live here at
-`/.well-known/assetlinks.json` for share links to open the app directly. The app's **password-reset**
-deep link still verifies against **civildigital.co.uk**, so the same statement must also stay live at
-`civildigital.co.uk/.well-known/assetlinks.json`. Keep the `sha256_cert_fingerprints` arrays in both
-copies in sync.
+Android App Links statement for `com.civildigital.farmflow`. Both the app's **listing share** App
+Link (`share_link_host`) and its **password-reset / email-verify** App Link (`auth_link_host`) now
+verify against **www.farmflowcaribbean.com**, so this file must stay live here at
+`/.well-known/assetlinks.json` for those links to open the app directly.
+
+The old `farmflow.civildigital.co.uk` host was retired on 2026-08-03 and no longer resolves. If a
+copy of this statement is still published at `civildigital.co.uk/.well-known/assetlinks.json` it is
+now only needed for any legacy install still pinned to that host; keep the
+`sha256_cert_fingerprints` arrays in sync with this file for as long as it stays published.
 
 ## Design notes
 

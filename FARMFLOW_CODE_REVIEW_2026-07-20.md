@@ -46,7 +46,7 @@ Firebase action links expose an API key, but this page already ships the intende
 
 **Location:** [auth/action/index.html](auth/action/index.html), lines 263–271
 
-`safeContinue()` checks only `u.hostname`. It consequently accepts URLs such as `http://farmflow.civildigital.co.uk/...` and `https://farmflow.civildigital.co.uk:8443/...`, despite the comment saying only an own-subdomain target is permitted. This can send a user from a sensitive password or email action to an unencrypted endpoint or an unintended service if one becomes reachable on that hostname.
+`safeContinue()` checks only `u.hostname`. It consequently accepts URLs such as `http://www.farmflowcaribbean.com/...` and `https://www.farmflowcaribbean.com:8443/...`, despite the comment saying only an own-subdomain target is permitted. This can send a user from a sensitive password or email action to an unencrypted endpoint or an unintended service if one becomes reachable on that hostname.
 
 **Recommendation:** allow only `https:`, the exact approved hostname, and the default HTTPS port; ideally permit only a small allow-list of known paths. Keep the fixed Play Store URL as the fallback.
 

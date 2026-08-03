@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FarmFlow — Fresh Stock Sheet — Green Valley Farm</title>
+<!-- Brand fonts (same as www.farmflowcaribbean.com). Falls back to system stack offline. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     FarmFlow — seller stock sheet (print one-pager)
+     Brand tokens lifted verbatim from assets/farmflow.css:
+     green #3E7C3C · harvest gold #F0A62B · soil brown #4E3620
+     ============================================================ */
+  @page { size: A4 portrait; margin: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root{
+    --green:#3E7C3C;
+    --green-deep:#24491F;
+    --green-soft:#E7EFE2;
+    --green-mid:#4C8A3F;
+    --green-dark:#3B6E33;
+    --gold:#F0A62B;
+    --gold-deep:#C97F10;
+    --soil:#4E3620;
+    --soil-deep:#3B2A17;
+    --cream:#FAF6ED;
+    --card:#FFFFFF;
+    --ink:#22301E;
+    --ink-soft:#5A6653;
+    --line:#EAE4D4;
+    --font-head:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+    --font-body:"Nunito Sans","Segoe UI",system-ui,sans-serif;
+  }
+
+  html,body{ background:#dcd8cf; }
+  body{
+    font-family:var(--font-body);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  h1,h2,h3{ font-family:var(--font-head); line-height:1.15; color:var(--green-deep); }
+
+  /* ---- A4 sheet ---- */
+  .sheet{
+    width:210mm; min-height:297mm; margin:12px auto;
+    background:var(--cream);
+    display:flex; flex-direction:column;
+    box-shadow:0 6px 30px rgba(34,48,30,.22);
+    overflow:hidden;
+  }
+  @media print{
+    html,body{ background:#fff; }
+    .sheet{ margin:0; box-shadow:none; width:auto; min-height:auto; }
+  }
+
+  /* ---- Header band (matches .hero) ---- */
+  .header{
+    background:var(--green);
+    color:#fff;
+    padding:14mm 16mm 11mm;
+    position:relative;
+    overflow:hidden;
+  }
+  /* signature sun-ray texture from .hero::before */
+  .header::before{
+    content:""; position:absolute; inset:-40% -20% auto -20%; height:200%;
+    background:repeating-conic-gradient(from -90deg at 50% 100%,
+      rgba(255,255,255,.06) 0deg 6deg, transparent 6deg 14deg);
+    pointer-events:none;
+  }
+  .header > *{ position:relative; }
+  .brandrow{ display:flex; align-items:center; gap:16px; }
+  .mark{ width:74px; height:74px; flex:0 0 auto; filter:drop-shadow(0 4px 12px rgba(0,0,0,.28)); }
+  .brandtext .name{
+    font-family:var(--font-head); font-size:40px; font-weight:800;
+    letter-spacing:-.01em; line-height:1; color:#fff;
+  }
+  .brandtext .sub{
+    margin-top:7px; font-size:13px; font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:#E4EEDD;
+  }
+  .tagline{
+    position:absolute; top:14mm; right:16mm;
+    font-family:var(--font-head); font-weight:700; color:var(--gold);
+    font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+  }
+
+  /* ---- Signature field-rows divider (from index.html .fields) ---- */
+  .fields{ display:block; width:100%; height:11mm; }
+
+  /* ---- Seller block ---- */
+  .seller{
+    padding:7mm 16mm 5mm;
+    display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+    border-bottom:2px solid var(--line);
+  }
+  .seller h1{ font-size:25px; font-weight:800; letter-spacing:-.01em; }
+  .seller .meta{ margin-top:4px; font-size:13px; color:var(--ink-soft); font-weight:600; }
+  .badge{
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+    background:var(--green-soft); color:var(--green-deep);
+    font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px; border:1px solid #d5e3cd;
+  }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--green); }
+
+  /* ---- Stock list ---- */
+  .stock{ padding:6mm 16mm 4mm; flex:1 1 auto; }
+  .listhead{
+    display:flex; justify-content:space-between;
+    font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-soft); font-weight:700; padding:0 10px 7px;
+  }
+  .row{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  .row:nth-child(even){ background:var(--card); }
+  .item .nm{ font-size:15.5px; font-weight:700; color:var(--ink); line-height:1.25; }
+  .item .cat{ font-size:11px; color:var(--ink-soft); margin-top:1px; font-weight:600; }
+  .price{
+    font-family:var(--font-head); font-size:16px; font-weight:800;
+    color:var(--green-deep); white-space:nowrap;
+  }
+  .price .unit{ font-family:var(--font-body); font-size:11px; color:var(--ink-soft); font-weight:600; }
+  .note{ margin-top:9px; padding:0 10px; font-size:10.5px; color:var(--ink-soft); font-style:italic; }
+
+  /* ---- Footer CTA ---- */
+  .footer{
+    background:var(--green-soft);
+    border-top:4px solid var(--gold);
+    padding:7mm 16mm;
+    display:flex; align-items:center; gap:16px;
+  }
+  .qr{
+    width:106px; height:106px; flex:0 0 auto;
+    background:#fff; border:2px solid var(--green-deep); border-radius:12px; padding:7px;
+  }
+  .cta{ flex:1 1 auto; }
+  .cta h2{ font-size:17px; font-weight:800; line-height:1.25; }
+  .cta p{ font-size:12.5px; color:var(--ink-soft); margin-top:3px; font-weight:600; }
+  .url{
+    display:inline-block; margin-top:8px;
+    font-family:var(--font-head); font-size:14px; font-weight:800; color:#fff;
+    background:var(--green-deep); padding:6px 14px; border-radius:8px; letter-spacing:.01em;
+  }
+  .disclaim{ font-size:9.5px; color:var(--ink-soft); margin-top:7px; line-height:1.45; }
+  /* Google Play badge (matches .play-badge) */
+  .play-badge{
+    display:inline-flex; align-items:center; gap:10px; flex:0 0 auto;
+    background:#122B10; color:#fff; text-decoration:none;
+    border:1px solid rgba(255,255,255,.25); border-radius:14px; padding:9px 16px;
+  }
+  .play-badge svg{ width:24px; height:24px; display:block; }
+  .play-badge span{ text-align:left; line-height:1.2; }
+  .play-badge small{ display:block; font-size:.62rem; opacity:.85; text-transform:uppercase; letter-spacing:.08em; }
+  .play-badge b{ font-size:.95rem; font-family:var(--font-head); }
+</style>
+</head>
+<body>
+  <div class="sheet">
+
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+      <div class="tagline">Buy. Sell. Grow.</div>
+      <div class="brandrow">
+        <!-- Official FarmFlow logo mark (verbatim from site index.html) -->
+        <svg class="mark" viewBox="0 0 120 120" role="img" aria-label="FarmFlow logo">
+          <circle cx="60" cy="60" r="58" fill="#3B2A17"/>
+          <circle cx="60" cy="60" r="49" fill="#FCEBC4"/>
+          <g>
+            <circle cx="60" cy="62" r="20" fill="#F0A62B"/>
+            <g stroke="#F0A62B" stroke-width="5" stroke-linecap="round">
+              <line x1="60" y1="20" x2="60" y2="34"/>
+              <line x1="32" y1="32" x2="42" y2="42"/>
+              <line x1="88" y1="32" x2="78" y2="42"/>
+              <line x1="22" y1="58" x2="36" y2="58"/>
+              <line x1="98" y1="58" x2="84" y2="58"/>
+            </g>
+          </g>
+          <path d="M11 62 h98 v20 a49 49 0 0 1 -98 0 z" fill="#2F5D2A"/>
+          <g>
+            <path d="M60 62 L44 111 L76 111 Z" fill="#5C4025"/>
+            <path d="M60 62 L20 96 L34 106 Z" fill="#4C8A3F"/>
+            <path d="M60 62 L100 96 L86 106 Z" fill="#4C8A3F"/>
+            <path d="M60 62 L11 78 L15 90 Z" fill="#3B6E33"/>
+            <path d="M60 62 L109 78 L105 90 Z" fill="#3B6E33"/>
+          </g>
+          <circle cx="60" cy="60" r="53.5" fill="none" stroke="#3B2A17" stroke-width="9"/>
+        </svg>
+        <div class="brandtext">
+          <div class="name">FarmFlow</div>
+          <div class="sub">Fresh stock sheet</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Signature field-rows divider (verbatim from site index.html) -->
+    <svg class="fields" viewBox="0 0 1440 74" preserveAspectRatio="none" aria-hidden="true">
+      <rect width="1440" height="74" fill="#3E7C3C"/>
+      <path d="M720 0 L560 74 L880 74 Z" fill="#5C4025"/>
+      <path d="M720 0 L300 74 L470 74 Z" fill="#4C8A3F"/>
+      <path d="M720 0 L970 74 L1140 74 Z" fill="#4C8A3F"/>
+      <path d="M720 0 L0 60 L0 74 L180 74 Z" fill="#3B6E33"/>
+      <path d="M720 0 L1440 60 L1440 74 L1260 74 Z" fill="#3B6E33"/>
+      <rect y="70" width="1440" height="4" fill="#FAF6ED"/>
+    </svg>
+
+    <!-- ============ SELLER ============ -->
+    <section class="seller">
+      <div>
+        <h1>Green Valley Farm</h1>
+        <div class="meta">St. Ann, Jamaica &middot; Updated 3 August 2026</div>
+      </div>
+      <span class="badge"><span class="dot"></span>Active stock</span>
+    </section>
+
+    <!-- ============ STOCK LIST ============ -->
+    <section class="stock">
+      <div class="listhead"><span>Item</span><span>Price</span></div>
+
+      <div class="row">
+        <div class="item"><div class="nm">Yellow yam</div><div class="cat">Root Crops &amp; Ground Provisions</div></div>
+        <div class="price">$450<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Scotch bonnet peppers</div><div class="cat">Peppers</div></div>
+        <div class="price">$120<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Callaloo</div><div class="cat">Vegetables</div></div>
+        <div class="price">$80<span class="unit">/bunch</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Green plantain</div><div class="cat">Fruit</div></div>
+        <div class="price">$60<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Sweet potato</div><div class="cat">Root Crops &amp; Ground Provisions</div></div>
+        <div class="price">$300<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Sorrel</div><div class="cat">Herbs</div></div>
+        <div class="price">$250<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Pumpkin</div><div class="cat">Vegetables</div></div>
+        <div class="price">$90<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Cassava</div><div class="cat">Root Crops &amp; Ground Provisions</div></div>
+        <div class="price">$260<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Dasheen</div><div class="cat">Root Crops &amp; Ground Provisions</div></div>
+        <div class="price">$280<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Escallion</div><div class="cat">Herbs</div></div>
+        <div class="price">$150<span class="unit">/bunch</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Thyme</div><div class="cat">Herbs</div></div>
+        <div class="price">$100<span class="unit">/bunch</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Pak choi</div><div class="cat">Vegetables</div></div>
+        <div class="price">$110<span class="unit">/bunch</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Ripe banana</div><div class="cat">Fruit</div></div>
+        <div class="price">$70<span class="unit">/lb</span></div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="nm">Pepper sauce (12oz)</div><div class="cat">Homemade</div></div>
+        <div class="price">$650<span class="unit">/jar</span></div>
+      </div>
+
+      <div class="note">Prices in JMD and subject to daily availability. Message the seller through FarmFlow to confirm what's in stock and arrange collection or delivery.</div>
+    </section>
+
+    <!-- ============ FOOTER CTA ============ -->
+    <footer class="footer">
+      <!-- REAL QR code (ECC level M) encoding https://www.farmflowcaribbean.com -->
+      <svg class="qr" viewBox="-4 -4 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="QR code linking to www.farmflowcaribbean.com"><rect x="-4" y="-4" width="37" height="37" fill="#ffffff"/><g fill="#24491F"><rect x="0" y="0" width="1" height="1"/><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="11" y="0" width="1" height="1"/><rect x="15" y="0" width="1" height="1"/><rect x="16" y="0" width="1" height="1"/><rect x="19" y="0" width="1" height="1"/><rect x="20" y="0" width="1" height="1"/><rect x="22" y="0" width="1" height="1"/><rect x="23" y="0" width="1" height="1"/><rect x="24" y="0" width="1" height="1"/><rect x="25" y="0" width="1" height="1"/><rect x="26" y="0" width="1" height="1"/><rect x="27" y="0" width="1" height="1"/><rect x="28" y="0" width="1" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="9" y="1" width="1" height="1"/><rect x="11" y="1" width="1" height="1"/><rect x="17" y="1" width="1" height="1"/><rect x="18" y="1" width="1" height="1"/><rect x="20" y="1" width="1" height="1"/><rect x="22" y="1" width="1" height="1"/><rect x="28" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="9" y="2" width="1" height="1"/><rect x="14" y="2" width="1" height="1"/><rect x="16" y="2" width="1" height="1"/><rect x="18" y="2" width="1" height="1"/><rect x="22" y="2" width="1" height="1"/><rect x="24" y="2" width="1" height="1"/><rect x="25" y="2" width="1" height="1"/><rect x="26" y="2" width="1" height="1"/><rect x="28" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="6" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="10" y="3" width="1" height="1"/><rect x="11" y="3" width="1" height="1"/><rect x="16" y="3" width="1" height="1"/><rect x="17" y="3" width="1" height="1"/><rect x="22" y="3" width="1" height="1"/><rect x="24" y="3" width="1" height="1"/><rect x="25" y="3" width="1" height="1"/><rect x="26" y="3" width="1" height="1"/><rect x="28" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="10" y="4" width="1" height="1"/><rect x="12" y="4" width="1" height="1"/><rect x="13" y="4" width="1" height="1"/><rect x="14" y="4" width="1" height="1"/><rect x="15" y="4" width="1" height="1"/><rect x="17" y="4" width="1" height="1"/><rect x="18" y="4" width="1" height="1"/><rect x="19" y="4" width="1" height="1"/><rect x="20" y="4" width="1" height="1"/><rect x="22" y="4" width="1" height="1"/><rect x="24" y="4" width="1" height="1"/><rect x="25" y="4" width="1" height="1"/><rect x="26" y="4" width="1" height="1"/><rect x="28" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="13" y="5" width="1" height="1"/><rect x="14" y="5" width="1" height="1"/><rect x="15" y="5" width="1" height="1"/><rect x="16" y="5" width="1" height="1"/><rect x="18" y="5" width="1" height="1"/><rect x="20" y="5" width="1" height="1"/><rect x="22" y="5" width="1" height="1"/><rect x="28" y="5" width="1" height="1"/><rect x="0" y="6" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="4" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/><rect x="14" y="6" width="1" height="1"/><rect x="16" y="6" width="1" height="1"/><rect x="18" y="6" width="1" height="1"/><rect x="20" y="6" width="1" height="1"/><rect x="22" y="6" width="1" height="1"/><rect x="23" y="6" width="1" height="1"/><rect x="24" y="6" width="1" height="1"/><rect x="25" y="6" width="1" height="1"/><rect x="26" y="6" width="1" height="1"/><rect x="27" y="6" width="1" height="1"/><rect x="28" y="6" width="1" height="1"/><rect x="8" y="7" width="1" height="1"/><rect x="11" y="7" width="1" height="1"/><rect x="12" y="7" width="1" height="1"/><rect x="13" y="7" width="1" height="1"/><rect x="15" y="7" width="1" height="1"/><rect x="19" y="7" width="1" height="1"/><rect x="0" y="8" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="3" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="5" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/><rect x="10" y="8" width="1" height="1"/><rect x="14" y="8" width="1" height="1"/><rect x="15" y="8" width="1" height="1"/><rect x="17" y="8" width="1" height="1"/><rect x="22" y="8" width="1" height="1"/><rect x="23" y="8" width="1" height="1"/><rect x="24" y="8" width="1" height="1"/><rect x="25" y="8" width="1" height="1"/><rect x="26" y="8" width="1" height="1"/><rect x="3" y="9" width="1" height="1"/><rect x="4" y="9" width="1" height="1"/><rect x="7" y="9" width="1" height="1"/><rect x="8" y="9" width="1" height="1"/><rect x="10" y="9" width="1" height="1"/><rect x="12" y="9" width="1" height="1"/><rect x="15" y="9" width="1" height="1"/><rect x="16" y="9" width="1" height="1"/><rect x="18" y="9" width="1" height="1"/><rect x="19" y="9" width="1" height="1"/><rect x="20" y="9" width="1" height="1"/><rect x="21" y="9" width="1" height="1"/><rect x="22" y="9" width="1" height="1"/><rect x="23" y="9" width="1" height="1"/><rect x="24" y="9" width="1" height="1"/><rect x="28" y="9" width="1" height="1"/><rect x="1" y="10" width="1" height="1"/><rect x="2" y="10" width="1" height="1"/><rect x="6" y="10" width="1" height="1"/><rect x="8" y="10" width="1" height="1"/><rect x="9" y="10" width="1" height="1"/><rect x="10" y="10" width="1" height="1"/><rect x="17" y="10" width="1" height="1"/><rect x="18" y="10" width="1" height="1"/><rect x="20" y="10" width="1" height="1"/><rect x="3" y="11" width="1" height="1"/><rect x="4" y="11" width="1" height="1"/><rect x="5" y="11" width="1" height="1"/><rect x="8" y="11" width="1" height="1"/><rect x="9" y="11" width="1" height="1"/><rect x="11" y="11" width="1" height="1"/><rect x="12" y="11" width="1" height="1"/><rect x="14" y="11" width="1" height="1"/><rect x="16" y="11" width="1" height="1"/><rect x="18" y="11" width="1" height="1"/><rect x="19" y="11" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="21" y="11" width="1" height="1"/><rect x="22" y="11" width="1" height="1"/><rect x="23" y="11" width="1" height="1"/><rect x="25" y="11" width="1" height="1"/><rect x="27" y="11" width="1" height="1"/><rect x="1" y="12" width="1" height="1"/><rect x="3" y="12" width="1" height="1"/><rect x="5" y="12" width="1" height="1"/><rect x="6" y="12" width="1" height="1"/><rect x="7" y="12" width="1" height="1"/><rect x="9" y="12" width="1" height="1"/><rect x="10" y="12" width="1" height="1"/><rect x="11" y="12" width="1" height="1"/><rect x="12" y="12" width="1" height="1"/><rect x="17" y="12" width="1" height="1"/><rect x="20" y="12" width="1" height="1"/><rect x="25" y="12" width="1" height="1"/><rect x="26" y="12" width="1" height="1"/><rect x="1" y="13" width="1" height="1"/><rect x="3" y="13" width="1" height="1"/><rect x="5" y="13" width="1" height="1"/><rect x="7" y="13" width="1" height="1"/><rect x="8" y="13" width="1" height="1"/><rect x="13" y="13" width="1" height="1"/><rect x="14" y="13" width="1" height="1"/><rect x="15" y="13" width="1" height="1"/><rect x="18" y="13" width="1" height="1"/><rect x="19" y="13" width="1" height="1"/><rect x="20" y="13" width="1" height="1"/><rect x="21" y="13" width="1" height="1"/><rect x="22" y="13" width="1" height="1"/><rect x="24" y="13" width="1" height="1"/><rect x="28" y="13" width="1" height="1"/><rect x="1" y="14" width="1" height="1"/><rect x="2" y="14" width="1" height="1"/><rect x="3" y="14" width="1" height="1"/><rect x="6" y="14" width="1" height="1"/><rect x="7" y="14" width="1" height="1"/><rect x="9" y="14" width="1" height="1"/><rect x="10" y="14" width="1" height="1"/><rect x="11" y="14" width="1" height="1"/><rect x="13" y="14" width="1" height="1"/><rect x="14" y="14" width="1" height="1"/><rect x="15" y="14" width="1" height="1"/><rect x="16" y="14" width="1" height="1"/><rect x="17" y="14" width="1" height="1"/><rect x="18" y="14" width="1" height="1"/><rect x="20" y="14" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="23" y="14" width="1" height="1"/><rect x="25" y="14" width="1" height="1"/><rect x="26" y="14" width="1" height="1"/><rect x="1" y="15" width="1" height="1"/><rect x="5" y="15" width="1" height="1"/><rect x="7" y="15" width="1" height="1"/><rect x="8" y="15" width="1" height="1"/><rect x="9" y="15" width="1" height="1"/><rect x="13" y="15" width="1" height="1"/><rect x="15" y="15" width="1" height="1"/><rect x="16" y="15" width="1" height="1"/><rect x="18" y="15" width="1" height="1"/><rect x="19" y="15" width="1" height="1"/><rect x="20" y="15" width="1" height="1"/><rect x="23" y="15" width="1" height="1"/><rect x="24" y="15" width="1" height="1"/><rect x="27" y="15" width="1" height="1"/><rect x="1" y="16" width="1" height="1"/><rect x="2" y="16" width="1" height="1"/><rect x="3" y="16" width="1" height="1"/><rect x="4" y="16" width="1" height="1"/><rect x="5" y="16" width="1" height="1"/><rect x="6" y="16" width="1" height="1"/><rect x="7" y="16" width="1" height="1"/><rect x="8" y="16" width="1" height="1"/><rect x="10" y="16" width="1" height="1"/><rect x="11" y="16" width="1" height="1"/><rect x="12" y="16" width="1" height="1"/><rect x="14" y="16" width="1" height="1"/><rect x="17" y="16" width="1" height="1"/><rect x="19" y="16" width="1" height="1"/><rect x="23" y="16" width="1" height="1"/><rect x="25" y="16" width="1" height="1"/><rect x="26" y="16" width="1" height="1"/><rect x="0" y="17" width="1" height="1"/><rect x="2" y="17" width="1" height="1"/><rect x="3" y="17" width="1" height="1"/><rect x="4" y="17" width="1" height="1"/><rect x="12" y="17" width="1" height="1"/><rect x="16" y="17" width="1" height="1"/><rect x="18" y="17" width="1" height="1"/><rect x="19" y="17" width="1" height="1"/><rect x="20" y="17" width="1" height="1"/><rect x="22" y="17" width="1" height="1"/><rect x="23" y="17" width="1" height="1"/><rect x="24" y="17" width="1" height="1"/><rect x="26" y="17" width="1" height="1"/><rect x="28" y="17" width="1" height="1"/><rect x="0" y="18" width="1" height="1"/><rect x="3" y="18" width="1" height="1"/><rect x="4" y="18" width="1" height="1"/><rect x="6" y="18" width="1" height="1"/><rect x="7" y="18" width="1" height="1"/><rect x="9" y="18" width="1" height="1"/><rect x="10" y="18" width="1" height="1"/><rect x="11" y="18" width="1" height="1"/><rect x="15" y="18" width="1" height="1"/><rect x="16" y="18" width="1" height="1"/><rect x="21" y="18" width="1" height="1"/><rect x="23" y="18" width="1" height="1"/><rect x="26" y="18" width="1" height="1"/><rect x="0" y="19" width="1" height="1"/><rect x="2" y="19" width="1" height="1"/><rect x="4" y="19" width="1" height="1"/><rect x="7" y="19" width="1" height="1"/><rect x="8" y="19" width="1" height="1"/><rect x="11" y="19" width="1" height="1"/><rect x="14" y="19" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/><rect x="20" y="19" width="1" height="1"/><rect x="21" y="19" width="1" height="1"/><rect x="22" y="19" width="1" height="1"/><rect x="23" y="19" width="1" height="1"/><rect x="24" y="19" width="1" height="1"/><rect x="27" y="19" width="1" height="1"/><rect x="0" y="20" width="1" height="1"/><rect x="3" y="20" width="1" height="1"/><rect x="5" y="20" width="1" height="1"/><rect x="6" y="20" width="1" height="1"/><rect x="8" y="20" width="1" height="1"/><rect x="9" y="20" width="1" height="1"/><rect x="11" y="20" width="1" height="1"/><rect x="12" y="20" width="1" height="1"/><rect x="17" y="20" width="1" height="1"/><rect x="19" y="20" width="1" height="1"/><rect x="20" y="20" width="1" height="1"/><rect x="21" y="20" width="1" height="1"/><rect x="22" y="20" width="1" height="1"/><rect x="23" y="20" width="1" height="1"/><rect x="24" y="20" width="1" height="1"/><rect x="26" y="20" width="1" height="1"/><rect x="27" y="20" width="1" height="1"/><rect x="28" y="20" width="1" height="1"/><rect x="8" y="21" width="1" height="1"/><rect x="9" y="21" width="1" height="1"/><rect x="10" y="21" width="1" height="1"/><rect x="13" y="21" width="1" height="1"/><rect x="14" y="21" width="1" height="1"/><rect x="16" y="21" width="1" height="1"/><rect x="18" y="21" width="1" height="1"/><rect x="20" y="21" width="1" height="1"/><rect x="24" y="21" width="1" height="1"/><rect x="25" y="21" width="1" height="1"/><rect x="26" y="21" width="1" height="1"/><rect x="27" y="21" width="1" height="1"/><rect x="28" y="21" width="1" height="1"/><rect x="0" y="22" width="1" height="1"/><rect x="1" y="22" width="1" height="1"/><rect x="2" y="22" width="1" height="1"/><rect x="3" y="22" width="1" height="1"/><rect x="4" y="22" width="1" height="1"/><rect x="5" y="22" width="1" height="1"/><rect x="6" y="22" width="1" height="1"/><rect x="9" y="22" width="1" height="1"/><rect x="11" y="22" width="1" height="1"/><rect x="13" y="22" width="1" height="1"/><rect x="14" y="22" width="1" height="1"/><rect x="15" y="22" width="1" height="1"/><rect x="16" y="22" width="1" height="1"/><rect x="18" y="22" width="1" height="1"/><rect x="19" y="22" width="1" height="1"/><rect x="20" y="22" width="1" height="1"/><rect x="22" y="22" width="1" height="1"/><rect x="24" y="22" width="1" height="1"/><rect x="25" y="22" width="1" height="1"/><rect x="26" y="22" width="1" height="1"/><rect x="0" y="23" width="1" height="1"/><rect x="6" y="23" width="1" height="1"/><rect x="8" y="23" width="1" height="1"/><rect x="11" y="23" width="1" height="1"/><rect x="13" y="23" width="1" height="1"/><rect x="19" y="23" width="1" height="1"/><rect x="20" y="23" width="1" height="1"/><rect x="24" y="23" width="1" height="1"/><rect x="0" y="24" width="1" height="1"/><rect x="2" y="24" width="1" height="1"/><rect x="3" y="24" width="1" height="1"/><rect x="4" y="24" width="1" height="1"/><rect x="6" y="24" width="1" height="1"/><rect x="8" y="24" width="1" height="1"/><rect x="9" y="24" width="1" height="1"/><rect x="12" y="24" width="1" height="1"/><rect x="14" y="24" width="1" height="1"/><rect x="15" y="24" width="1" height="1"/><rect x="17" y="24" width="1" height="1"/><rect x="20" y="24" width="1" height="1"/><rect x="21" y="24" width="1" height="1"/><rect x="22" y="24" width="1" height="1"/><rect x="23" y="24" width="1" height="1"/><rect x="24" y="24" width="1" height="1"/><rect x="26" y="24" width="1" height="1"/><rect x="27" y="24" width="1" height="1"/><rect x="0" y="25" width="1" height="1"/><rect x="2" y="25" width="1" height="1"/><rect x="3" y="25" width="1" height="1"/><rect x="4" y="25" width="1" height="1"/><rect x="6" y="25" width="1" height="1"/><rect x="8" y="25" width="1" height="1"/><rect x="9" y="25" width="1" height="1"/><rect x="10" y="25" width="1" height="1"/><rect x="11" y="25" width="1" height="1"/><rect x="13" y="25" width="1" height="1"/><rect x="16" y="25" width="1" height="1"/><rect x="17" y="25" width="1" height="1"/><rect x="18" y="25" width="1" height="1"/><rect x="20" y="25" width="1" height="1"/><rect x="23" y="25" width="1" height="1"/><rect x="25" y="25" width="1" height="1"/><rect x="26" y="25" width="1" height="1"/><rect x="27" y="25" width="1" height="1"/><rect x="28" y="25" width="1" height="1"/><rect x="0" y="26" width="1" height="1"/><rect x="2" y="26" width="1" height="1"/><rect x="3" y="26" width="1" height="1"/><rect x="4" y="26" width="1" height="1"/><rect x="6" y="26" width="1" height="1"/><rect x="8" y="26" width="1" height="1"/><rect x="9" y="26" width="1" height="1"/><rect x="10" y="26" width="1" height="1"/><rect x="11" y="26" width="1" height="1"/><rect x="13" y="26" width="1" height="1"/><rect x="15" y="26" width="1" height="1"/><rect x="17" y="26" width="1" height="1"/><rect x="19" y="26" width="1" height="1"/><rect x="21" y="26" width="1" height="1"/><rect x="22" y="26" width="1" height="1"/><rect x="23" y="26" width="1" height="1"/><rect x="24" y="26" width="1" height="1"/><rect x="25" y="26" width="1" height="1"/><rect x="26" y="26" width="1" height="1"/><rect x="27" y="26" width="1" height="1"/><rect x="0" y="27" width="1" height="1"/><rect x="6" y="27" width="1" height="1"/><rect x="9" y="27" width="1" height="1"/><rect x="10" y="27" width="1" height="1"/><rect x="12" y="27" width="1" height="1"/><rect x="13" y="27" width="1" height="1"/><rect x="16" y="27" width="1" height="1"/><rect x="18" y="27" width="1" height="1"/><rect x="20" y="27" width="1" height="1"/><rect x="22" y="27" width="1" height="1"/><rect x="23" y="27" width="1" height="1"/><rect x="25" y="27" width="1" height="1"/><rect x="27" y="27" width="1" height="1"/><rect x="0" y="28" width="1" height="1"/><rect x="1" y="28" width="1" height="1"/><rect x="2" y="28" width="1" height="1"/><rect x="3" y="28" width="1" height="1"/><rect x="4" y="28" width="1" height="1"/><rect x="5" y="28" width="1" height="1"/><rect x="6" y="28" width="1" height="1"/><rect x="8" y="28" width="1" height="1"/><rect x="9" y="28" width="1" height="1"/><rect x="10" y="28" width="1" height="1"/><rect x="13" y="28" width="1" height="1"/><rect x="14" y="28" width="1" height="1"/><rect x="17" y="28" width="1" height="1"/><rect x="18" y="28" width="1" height="1"/><rect x="19" y="28" width="1" height="1"/><rect x="23" y="28" width="1" height="1"/><rect x="24" y="28" width="1" height="1"/><rect x="25" y="28" width="1" height="1"/><rect x="26" y="28" width="1" height="1"/></g></svg>
+
+      <div class="cta">
+        <h2>Shop this stall on FarmFlow</h2>
+        <p>Scan to message the seller and buy. Free on Google Play.</p>
+        <span class="url">www.farmflowcaribbean.com</span>
+        <div class="disclaim">FarmFlow connects buyers and sellers — you arrange payment, collection or delivery directly with the seller on WhatsApp or SMS. FarmFlow does not process payments. Operated by Civil Digital.</div>
+      </div>
+
+      <a class="play-badge" href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 1.8 13.7 12 3.6 22.2c-.37-.2-.6-.6-.6-1.1V2.9c0-.5.23-.9.6-1.1z"/><path fill="#FBBC04" d="m17.4 8.3-3.7 3.7-10.1-10.2c.16-.09.35-.14.55-.14.2 0 .4.05.58.15l12.67 6.49z"/><path fill="#EA4335" d="m17.4 15.7-12.67 6.5c-.18.1-.38.15-.58.15-.2 0-.39-.05-.55-.14L13.7 12l3.7 3.7z"/><path fill="#4285F4" d="M21.4 10.9c.8.4.8 1.8 0 2.2l-4 2.6-4-3.7 4-3.7 4 2.6z"/></svg>
+        <span><small>Get it on</small><b>Google Play</b></span>
+      </a>
+    </footer>
+
+  </div>
+</body>
+</html>

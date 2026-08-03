@@ -89,7 +89,7 @@
 
 <header class="subhero">
   <div class="wrap">
-    <div class="crumb"><a href="https://farmflow.civildigital.co.uk/">← FarmFlow Home</a></div>
+    <div class="crumb"><a href="https://www.farmflowcaribbean.com/">← FarmFlow Home</a></div>
     <h1 id="pageHeading">FarmFlow account</h1>
     <p id="pageSub">Securely complete the action from your FarmFlow email.</p>
   </div>
@@ -186,7 +186,7 @@
       <h2 id="recoverDoneTitle">Sign-in email restored</h2>
       <p class="auth-lede">The email address on your FarmFlow account has been restored to <span class="auth-email" id="recoverEmail">your previous email</span>. As a precaution, we recommend resetting your password.</p>
       <div class="success-actions">
-        <a class="btn-primary btn-block" href="https://farmflow.civildigital.co.uk/">Back to FarmFlow</a>
+        <a class="btn-primary btn-block" href="https://www.farmflowcaribbean.com/">Back to FarmFlow</a>
       </div>
     </section>
 
@@ -211,7 +211,7 @@
       <h2 id="landingTitle">Secure account links</h2>
       <p class="auth-lede">This page completes secure actions from FarmFlow emails, such as resetting your password or verifying your email. Open the link straight from your FarmFlow email, or manage your account from the app.</p>
       <div class="success-actions">
-        <a class="btn-primary btn-block" href="https://farmflow.civildigital.co.uk/">Back to FarmFlow</a>
+        <a class="btn-primary btn-block" href="https://www.farmflowcaribbean.com/">Back to FarmFlow</a>
       </div>
     </section>
 
@@ -265,7 +265,7 @@
     if (continueUrl){
       try{
         const u = new URL(continueUrl, location.origin);
-        if (u.hostname === "farmflow.civildigital.co.uk") return u.href;
+        if (u.hostname === "www.farmflowcaribbean.com") return u.href;
       }catch(e){/* ignore */}
     }
     return fallback || PLAY_URL;
@@ -355,7 +355,7 @@
       try {
         await confirmPasswordReset(auth, oobCode, pw1.value);
         qs("#resetContinue").setAttribute(
-          "href", safeContinue("https://farmflow.civildigital.co.uk/auth/continue?flow=reset"));
+          "href", safeContinue("https://www.farmflowcaribbean.com/auth/continue?flow=reset"));
         show("reset-done");
         qs("#resetContinue").focus();
       } catch (err2) {
@@ -397,7 +397,7 @@
         await applyActionCode(auth, oobCode);
         if (email) qs("#verifyEmail").textContent = email;
         qs("#verifyContinue").setAttribute(
-          "href", safeContinue("https://farmflow.civildigital.co.uk/auth/continue?flow=verify"));
+          "href", safeContinue("https://www.farmflowcaribbean.com/auth/continue?flow=verify"));
         show("verify-done");
         qs("#verifyContinue").focus();
       } catch (e){
