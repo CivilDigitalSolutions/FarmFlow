@@ -53,7 +53,8 @@ A placement shows only when **both** are true:
    from the app (Profile → Ad controls) or the website (Account page → Ad controls, admins only).
 2. its ad unit ID is filled in `AD_UNITS` in `web/src/ads.tsx` (then rebuild + deploy).
 
-While off, the AdSense script is never loaded. Consent (UK / EEA) is Google's own message from
+While off, the AdSense script is never loaded. When on, each ad loads only as it comes within ~300px of
+the screen (`AD_LOAD_MARGIN`), so ads further down a list the visitor never reaches cost no mobile data. Consent (UK / EEA) is Google's own message from
 AdSense → Privacy & messaging; the footer's "Privacy & cookie settings" link reopens it. Off the real domain (e.g. `farmflow-51796.web.app`)
 ads run in AdSense test mode. `ads.txt` (and `app-ads.txt` for AdMob) are at the site root.
 
