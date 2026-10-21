@@ -193,14 +193,15 @@ img,svg{max-width:100%}
 }
 .cat-card{
   background:var(--card);border:1px solid var(--line);border-radius:14px;
-  box-shadow:var(--shadow);padding:18px 16px;text-align:center;
-  text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px;
+  box-shadow:var(--shadow);padding:0 0 14px;text-align:center;overflow:hidden;
+  text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px;
   transition:transform .15s ease, box-shadow .15s ease;
 }
 .cat-card:hover,.cat-card:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
-.cat-card .emoji{font-size:1.8rem;line-height:1}
-.cat-card .label{font-weight:700;font-size:.92rem;color:var(--green-deep)}
-.cat-card .sub{font-size:.78rem;color:var(--ink-soft)}
+.cat-card .cat-photo{display:block;width:100%;margin-bottom:6px;background:var(--green-soft)}
+.cat-card .cat-photo img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.cat-card .label{font-weight:700;font-size:.92rem;color:var(--green-deep);padding:0 12px}
+.cat-card .sub{font-size:.78rem;color:var(--ink-soft);padding:0 12px}
 
 /* ---------- numbered steps (how it works) ---------- */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin:28px 0}
