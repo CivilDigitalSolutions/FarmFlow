@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--
+  The FarmFlow web marketplace shell. The `web` Cloud Function fetches this file and replaces the two
+  marked regions to server-render /listing/ and /seller/ pages — keep both marker pairs intact:
+    <!-ff:seo-> … <!-/ff:seo->   page-specific title / description / canonical / OG / JSON-LD
+    <!-ff:app-> … <!-/ff:app->   the rendered page (here: the home page's no-JS content)
+-->
+<!--ff:seo-->
+<title>FarmFlow — Buy &amp; Sell Fresh Caribbean Produce Online</title>
+<meta name="description" content="Browse fresh local produce from Caribbean growers — ground provisions, yam, cassava, callaloo, scotch bonnet and more — in Trinidad &amp; Tobago, Jamaica, Barbados, Guyana and beyond. No sign-up needed to browse.">
+<link rel="canonical" href="https://www.farmflowcaribbean.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FarmFlow">
+<meta property="og:title" content="FarmFlow — Caribbean Produce Marketplace">
+<meta property="og:description" content="Browse fresh local produce from Caribbean growers and contact sellers directly on WhatsApp or SMS. Buy. Sell. Grow.">
+<meta property="og:url" content="https://www.farmflowcaribbean.com/">
+<meta property="og:image" content="https://www.farmflowcaribbean.com/images/og-image.png">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FarmFlow — Caribbean Produce Marketplace">
+<meta name="twitter:description" content="Browse fresh local produce from Caribbean growers and contact sellers directly.">
+<meta name="twitter:image" content="https://www.farmflowcaribbean.com/images/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebSite","@id":"https://www.farmflowcaribbean.com/#website","url":"https://www.farmflowcaribbean.com/","name":"FarmFlow","inLanguage":"en-GB","publisher":{"@id":"https://www.farmflowcaribbean.com/#organization"}},
+ {"@type":"Organization","@id":"https://www.farmflowcaribbean.com/#organization","name":"FarmFlow","url":"https://www.farmflowcaribbean.com/","logo":"https://www.farmflowcaribbean.com/icons/icon-512.png","sameAs":["https://play.google.com/store/apps/details?id=com.civildigital.farmflow","https://civildigital.co.uk"]},
+ {"@type":"WebApplication","name":"FarmFlow","url":"https://www.farmflowcaribbean.com/","applicationCategory":"ShoppingApplication","operatingSystem":"Any (web browser), Android","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+]}
+</script>
+<!--/ff:seo-->
+<meta name="theme-color" content="#3E7C3C">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FarmFlow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<script type="module" src="/src/main.tsx"></script>
+</head>
+<body>
+<!--ff:app--><div id="app">
+<header class="topbar"><div class="topbar-in"><a class="brand" href="/"><img src="/images/favicon.png" alt="" width="28" height="28">FarmFlow</a><nav class="topbar-nav"><a href="/">Marketplace</a><a href="/donate">Donate</a><a href="/about/">About</a><a class="btn btn-small" href="/signin">Sign in</a></nav></div></header>
+<main class="page home-static">
+<h1>Fresh Caribbean produce, straight from the grower</h1>
+<p>FarmFlow is the marketplace for local produce across Trinidad &amp; Tobago, Jamaica, Barbados, Guyana and the wider Caribbean. Browse what's in stock today — no sign-up needed — then contact the seller directly on WhatsApp or SMS.</p>
+<p class="noscript-note">The marketplace needs JavaScript. You can still read <a href="/about/">about FarmFlow</a>, browse <a href="/produce/">produce guides</a>, or get the <a href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">Android app</a>.</p>
+</main>
+</div><!--/ff:app-->
+</body>
+</html>

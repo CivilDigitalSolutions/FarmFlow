@@ -11,3 +11,9 @@ Thumbs.db
 
 # stray FUSE artifacts (do not commit)
 .fuse_hidden*
+
+# Web app build (npm run build → build/ then dist/, which Firebase Hosting deploys)
+node_modules/
+build/
+dist/
+.firebase/

@@ -57,6 +57,7 @@
     <p class="lede" id="lede">Open the FarmFlow app to continue.</p>
     <a class="btn-primary btn-block" href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">Open FarmFlow on Google Play</a>
     <p class="fineprint">If FarmFlow is installed, this page normally opens straight in the app. You can close this tab.</p>
+    <p class="fineprint">Using FarmFlow in your browser (iPhone, iPad or computer)? <a id="web-continue" href="/account">Continue on the website</a>.</p>
   </div>
 </main>
 
@@ -83,6 +84,7 @@
   if (flow === "reset") {
     document.getElementById("title").textContent = "Password updated";
     document.getElementById("lede").textContent = "Your password has been changed. Open FarmFlow and sign in with your new password.";
+    document.getElementById("web-continue").href = "/signin";
   } else if (flow === "verify") {
     document.getElementById("title").textContent = "Email verified";
     document.getElementById("lede").textContent = "Your email is verified. Open FarmFlow to continue — your verified status updates automatically.";

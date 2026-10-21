@@ -1,9 +1,48 @@
-# FarmFlow Support Site — www.farmflowcaribbean.com
+# FarmFlow — www.farmflowcaribbean.com
 
-Production static site for **www.farmflowcaribbean.com**, published with GitHub Pages.
-The repository root **is** the website root (no build step). Static, dependency-free branch
-site for the FarmFlow Android app, designed to sit alongside (but look nothing like)
-civildigital.co.uk. All pages are plain HTML + one shared stylesheet.
+The FarmFlow website: the **web marketplace** (browse, sign in, contact sellers, donate — usable on
+iPhone, iPad, desktop and any browser, installable as a PWA) plus the static marketing / support
+pages. Served by **Firebase Hosting** (project `farmflow-51796`, the same Firebase project as the
+Android app — one account, one set of security rules).
+
+| Path | What serves it |
+|---|---|
+| `/` | Web marketplace home (`web/`, built by Vite) |
+| `/listing/{slug}?id=`, `/seller/{slug}?id=`, `/api/*`, `/sitemap-marketplace.xml` | `web` Cloud Function (FarmFlow-App repo, `functions/web/`) — server-rendered, search-indexable |
+| `/api/donate`, `/api/stripe/webhook` | `donations` Cloud Function (Stripe Checkout) |
+| `/signin`, `/account`, `/account/setup`, `/donate`, `/donate/thanks` | Web marketplace (client routes) |
+| `/about/` | The former home page (marketing) |
+| everything else (`/jamaica/`, `/produce/…`, `/help/`, `/privacy/`, `/auth/action/`, `/.well-known/…`) | Static files from the repo root, unchanged |
+
+### Build & deploy
+
+```bash
+npm ci
+npm test                 # search / ranking parity tests (Node ≥ 22.18)
+npm run build            # typecheck → vite build → scripts/assemble.mjs → dist/
+npx firebase-tools deploy --only hosting       # deploys dist/ (see firebase.json)
+```
+
+Deploy the Cloud Functions from the FarmFlow-App repo **first** (`firebase deploy --only
+functions:web,functions:donations,firestore:rules`); the rewrites in `firebase.json` point at them.
+`npm run dev` serves the app locally against the deployed API.
+
+### Cut-over from GitHub Pages
+
+The repo root is still a complete static site, so GitHub Pages keeps working until DNS moves:
+1. Deploy functions + hosting, then test on `https://farmflow-51796.web.app`.
+2. Firebase console → Hosting → **Add custom domain** `www.farmflowcaribbean.com`; set the DNS records
+   it shows at the registrar (replacing the GitHub Pages CNAME). Wait for the certificate.
+3. Then GitHub → Settings → Pages → remove the custom domain / disable Pages. `CNAME` and `.nojekyll`
+   become unused (they are excluded from `dist/`).
+
+The web app: `web/src/` — `main.tsx` (routes), `pages/`, `search.ts` (port of Android's search),
+`auth.ts` (sign-in, same rules as the app), `data.ts` (signed-in Firestore reads/writes),
+`session.ts`. Browsing never loads the Firebase SDK; it runs on the public `/api/*`.
+
+---
+
+The rest of this README describes the static marketing pages.
 
 ## Structure.
 
@@ -47,7 +86,7 @@ Every indexable page carries a self-referencing canonical, Open Graph + Twitter 
 
 **Known follow-up (flagged, not fixed in this repo):** `thewww.farmflowcaribbean.com` was found serving a 200 response alongside the canonical `www.farmflowcaribbean.com` domain. Self-referencing canonicals mitigate the duplicate-content risk, but a proper fix (301 redirect or removing the DNS entry) needs to happen at the registrar/host level, outside this repository.
 
-## Publish (GitHub Pages, deploy from root)
+## Publish (legacy: GitHub Pages, deploy from root — until the Firebase cut-over above)
 
 1. Create/point a GitHub repo and push this branch (`main`).
 2. **Settings → Pages → Build and deployment → Deploy from a branch → `main` / `/ (root)`**.
@@ -65,6 +104,11 @@ resolves the listing (names are not unique). That path has no static file, so `4
 offers open-in-app / Play Store. Legacy links that put the id straight in the path
 (`/listing/{id}`, or the old `/farmflow/listing/{id}`) still resolve: the `404.html` router falls back
 to treating the path segment as the id when no `?id=` is present.
+
+**On Firebase Hosting** the `/listing/` and `/seller/` paths are rewritten to the `web` Cloud Function
+instead, which renders the real listing / stall (both URL forms, `?id=` or id-in-path). The
+`404.html` router and `listing/index.html` above only apply on GitHub Pages; `listing/` is left out
+of `dist/`.
 
 ## `.well-known/assetlinks.json`
 

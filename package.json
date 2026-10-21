@@ -1,0 +1,23 @@
+{
+  "name": "farmflow-site",
+  "private": true,
+  "type": "module",
+  "description": "www.farmflowcaribbean.com: the FarmFlow web marketplace (web/) plus the static marketing pages, deployed to Firebase Hosting.",
+  "scripts": {
+    "dev": "vite --config web/vite.config.ts",
+    "typecheck": "tsc -p web --noEmit",
+    "test": "node --test web/test/*.test.mjs",
+    "build": "tsc -p web --noEmit && vite build --config web/vite.config.ts && node scripts/assemble.mjs",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "build:emulator": "tsc -p web --noEmit && VITE_FIREBASE_EMULATORS=1 vite build --config web/vite.config.ts && node scripts/assemble.mjs"
+  },
+  "dependencies": {
+    "firebase": "^12.19.0",
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "typescript": "^6.0.3",
+    "vite": "^7.3.6"
+  }
+}
