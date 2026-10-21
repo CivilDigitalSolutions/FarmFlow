@@ -146,6 +146,34 @@ now only needed for any legacy install still pinned to that host; keep the
 - Fonts are loaded from Google Fonts (Bricolage Grotesque + Nunito Sans). If self-hosting fonts is preferred, download the two families and update the `<link>` tags and CSS `font-family` stacks.
 - The logo is currently a simplified inline SVG recreation. Replace with the real FarmFlow logo asset (SVG or PNG) in `index.html` (`.mark`) when available.
 
+## Produce photos (`images/produce/`)
+
+The category tiles on the home page and `/produce/`, and the produce pages' social-share
+images (`images/produce/share/*.jpg`, 1200×630), use stock photos from Pexels under the
+[Pexels licence](https://www.pexels.com/license/) (free for commercial use, no attribution
+required; don't imply the people or brands shown endorse FarmFlow). They are the same photos as
+the app's Play Store demo build (FarmFlow-App `store/README.md`). Each tile has a 240 px and
+480 px WebP plus a 480 px JPEG fallback, cropped 4:3.
+
+| Image | Used for | Pexels photo |
+|---|---|---|
+| `christophene` | Vegetables tile | https://www.pexels.com/photo/7543109/ |
+| `mango` | Fruit tile | https://www.pexels.com/photo/7543169/ |
+| `dasheen` | Root Crops tile | https://www.pexels.com/photo/7543152/ |
+| `chadon-beni` | Herbs tile | https://www.pexels.com/photo/7456525/ |
+| `pumpkin` | Provisions tile | https://www.pexels.com/photo/9823515/ |
+| `bonnet` | Peppers / Scotch Bonnet tiles, scotch-bonnet share | https://www.pexels.com/photo/19029815/ |
+| `pepper-sauce` | Homemade tile | https://www.pexels.com/photo/33800365/ |
+| `yam-2` | Ground Provisions tile + share | https://www.pexels.com/photo/30204260/ |
+| `yam` | Yam tile + share | https://www.pexels.com/photo/34143558/ |
+| `cassava` | Cassava tile + share | https://www.pexels.com/photo/7543155/ |
+| `dasheen-bush` | Callaloo tile + share (dasheen leaves, as callaloo is made in Trinidad) | https://www.pexels.com/photo/37143457/ |
+| `plantain` | Plantain tile + share | https://www.pexels.com/photo/39049842/ |
+
+Stock photos are used only on the marketing pages. Marketplace listings never show one: a listing
+without the seller's own photo keeps its category emoji, so buyers can tell a real photo from an
+illustration.
+
 ## Placeholders to replace (find & replace across all files)
 
 | Token | Meaning |
