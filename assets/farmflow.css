@@ -391,6 +391,29 @@ footer.site{
 .foot nav a:hover{color:#fff;text-decoration:underline}
 .foot .legal{width:100%;border-top:1px solid rgba(255,255,255,.14);padding-top:18px;color:#9DB292}
 
+/* ---------- "Get the Android app" corner popup (assets/app-promo.js) ---------- */
+.app-promo{
+  position:fixed;right:16px;bottom:16px;z-index:50;
+  width:min(320px,calc(100vw - 32px));
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow-lift);padding:14px 40px 14px 14px;
+  opacity:0;transform:translateY(16px);transition:opacity .25s ease, transform .25s ease;
+}
+.app-promo.is-open{opacity:1;transform:none}
+.app-promo-icon{width:44px;height:44px;border-radius:11px;flex:none}
+.app-promo-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.app-promo-text strong{font-family:"Bricolage Grotesque","Nunito Sans",sans-serif;color:var(--green-deep);font-size:1rem}
+.app-promo-text span{font-size:.86rem;color:var(--ink-soft)}
+.app-promo-badge{display:block;margin:6px 0 0 -10px;line-height:0}
+.app-promo-badge img{width:162px;height:auto}
+.app-promo-close{
+  position:absolute;top:6px;right:6px;width:32px;height:32px;border:0;border-radius:50%;
+  background:transparent;color:var(--ink-soft);font-size:1.4rem;line-height:1;cursor:pointer;
+}
+.app-promo-close:hover,.app-promo-close:focus-visible{background:var(--green-soft);color:var(--green-deep)}
+@media print{.app-promo{display:none}}
+
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
   html{scroll-behavior:auto}
