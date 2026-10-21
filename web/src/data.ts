@@ -156,3 +156,17 @@ export async function setFavouriteListing(uid: string, listingId: string, on: bo
   if (on) await setDoc(ref, { listingId });
   else await deleteDoc(ref);
 }
+
+/** The two shared ad switches in config/ads — the same fields the app's AdsConfig reads. */
+export type AdSwitch = 'searchNativeEnabled' | 'detailGridEnabled';
+
+/** Live values of the shared ad switches (admins; any signed-in user may read config/ads). */
+export async function loadAdSwitches(): Promise<Record<AdSwitch, boolean>> {
+  const d = (await getDoc(doc(db, 'config', 'ads'))).data() ?? {};
+  return { searchNativeEnabled: d.searchNativeEnabled === true, detailGridEnabled: d.detailGridEnabled === true };
+}
+
+/** FirebaseRepository.setAdEnabled, field for field: admin-only by firestore.rules. */
+export async function setAdSwitch(field: AdSwitch, enabled: boolean, adminUid: string): Promise<void> {
+  await setDoc(doc(db, 'config', 'ads'), { [field]: enabled, updatedAt: serverTimestamp(), updatedBy: adminUid }, { merge: true });
+}

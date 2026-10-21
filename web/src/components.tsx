@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { AdPrivacyLink } from './ads.tsx';
 import { useEffect, useState } from 'preact/hooks';
 import { PLAY_URL, isAndroid, isIos, isStandalone, store } from './format.ts';
 import { formatDistance, priceEstimateLabel } from './search.ts';
@@ -40,6 +41,7 @@ export function Footer() {
         <p>
           <a href="/about/">About FarmFlow</a> · <a href="/help/">Help</a> · <a href="/safety/">Safety</a> ·{' '}
           <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a> · <a href="/contact/">Contact</a>
+          <AdPrivacyLink />
         </p>
         <p><a href={PLAY_URL} rel="noopener">Get FarmFlow on Google Play</a></p>
       </div>

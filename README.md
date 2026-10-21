@@ -48,11 +48,13 @@ account and publisher ID (`pub-5319059698255764`) as the app. Code: `web/src/ads
 `web/src/adslots.ts`.
 
 A placement shows only when **both** are true:
-1. its switch is on in Firestore `config/ads` — `webSearchEnabled` / `webDetailEnabled` (separate
-   from the app's `detailGridEnabled` / `searchNativeEnabled`; set them in the Firebase console), and
+1. its switch is on in Firestore `config/ads` — `searchNativeEnabled` / `detailGridEnabled`, the
+   **same switches the app uses**, so one flip changes the app and the website together. Flip them
+   from the app (Profile → Ad controls) or the website (Account page → Ad controls, admins only).
 2. its ad unit ID is filled in `AD_UNITS` in `web/src/ads.tsx` (then rebuild + deploy).
 
-While off, the AdSense script is never loaded. Off the real domain (e.g. `farmflow-51796.web.app`)
+While off, the AdSense script is never loaded. Consent (UK / EEA) is Google's own message from
+AdSense → Privacy & messaging; the footer's "Privacy & cookie settings" link reopens it. Off the real domain (e.g. `farmflow-51796.web.app`)
 ads run in AdSense test mode. `ads.txt` (and `app-ads.txt` for AdMob) are at the site root.
 
 ---

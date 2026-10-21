@@ -4,6 +4,7 @@ import { Card, Page, ProfileRetry, Spinner } from '../components.tsx';
 import { PLAY_URL } from '../format.ts';
 import { navigate, type Location } from '../router.ts';
 import { authModule, dataModule, refreshSession, useSession } from '../session.ts';
+import type { AdSwitch } from '../data.ts';
 import type { Meta, PublicListing } from '../types.ts';
 import { safeNext } from './SignIn.tsx';
 
@@ -99,6 +100,8 @@ export function Account() {
         <p><a class="btn btn-small btn-outline" href={PLAY_URL} rel="noopener">FarmFlow on Google Play</a></p>
       </section>
 
+      <AdControls uid={session.uid} />
+
       <p class="row">
         <a class="btn btn-outline" href="/donate">Support FarmFlow</a>
         <button type="button" class="btn btn-ghost" onClick={async () => {
@@ -109,6 +112,66 @@ export function Account() {
       </p>
       <p class="hint">To delete your account, see <a href="/account-deletion/">account deletion</a>.</p>
     </Page>
+  );
+}
+
+const AD_SWITCHES: { field: AdSwitch; label: string }[] = [
+  { field: 'searchNativeEnabled', label: 'Search results ads' },
+  { field: 'detailGridEnabled', label: 'Listing page ads' },
+];
+
+/**
+ * The app's Ad controls screen, on the web: the same two config/ads switches, so each one turns a
+ * placement on or off in the app AND on the website. Admins only (the `admin` claim; firestore.rules
+ * enforce it on the write). Optimistic, reverting if the write fails — as in the app.
+ */
+function AdControls({ uid }: { uid: string }) {
+  const [admin, setAdmin] = useState(false);
+  const [values, setValues] = useState<Record<AdSwitch, boolean> | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let live = true;
+    authModule().then((m) => m.isAdmin()).then(async (isAdmin) => {
+      if (!live || !isAdmin) return;
+      setAdmin(true);
+      try {
+        const v = await (await dataModule()).loadAdSwitches();
+        if (live) setValues(v);
+      } catch {
+        if (live) setError('Couldn’t load the ad switches.');
+      }
+    });
+    return () => { live = false; };
+  }, [uid]);
+
+  if (!admin) return null;
+  const flip = async (field: AdSwitch) => {
+    if (!values) return;
+    const next = !values[field];
+    setValues({ ...values, [field]: next });
+    setError(null);
+    try {
+      await (await dataModule()).setAdSwitch(field, next, uid);
+    } catch {
+      setValues((v) => (v ? { ...v, [field]: !next } : v));
+      setError('Couldn’t save that change. Check your connection and that this account is an admin.');
+    }
+  };
+  return (
+    <section class="notice-box ad-controls">
+      <strong>Ad controls</strong>
+      <p>Each switch controls ads in the Android app and on the website together. The app updates
+        straight away; the website within about two minutes.</p>
+      {values == null ? <Spinner /> : AD_SWITCHES.map(({ field, label }) => (
+        <label class="toggle" key={field}>
+          <input type="checkbox" role="switch" checked={values[field]} onChange={() => flip(field)} />
+          <span>{label}</span>
+        </label>
+      ))}
+      <p class="hint">The website also needs its AdSense ad units set up before any ad can appear there.</p>
+      {error && <p class="error" role="alert">{error}</p>}
+    </section>
   );
 }
 

@@ -108,6 +108,20 @@ export async function idToken(): Promise<string | null> {
   return auth.currentUser ? auth.currentUser.getIdToken() : null;
 }
 
+/**
+ * Whether the signed-in user holds the `admin` custom claim — the same claim firestore.rules'
+ * isAdmin() checks (synced from users/{uid}.isAdmin by syncAdminClaim). Only decides whether to show
+ * admin tools; the rules are the real boundary.
+ */
+export async function isAdmin(): Promise<boolean> {
+  if (!auth.currentUser) return false;
+  try {
+    return (await auth.currentUser.getIdTokenResult()).claims.admin === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   try {
     return (await signInWithEmailAndPassword(auth, email.trim(), password)).user;

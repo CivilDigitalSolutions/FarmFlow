@@ -2,16 +2,20 @@
  * Website ads — Google AdSense, the web counterpart of the app's AdMob (same Google account and
  * publisher ID, same advertisers). Built like the app's ads (README "Feature 2"):
  *
- *   - Ships DARK. A placement shows only when its switch in Firestore `config/ads` is on
- *     (`webDetailEnabled` / `webSearchEnabled`, served by /api/config, OFF on any error) AND its ad
- *     unit ID below is filled in. The app's own switches don't affect the website and vice versa.
+ *   - Ships DARK. A placement shows only when its switch in Firestore `config/ads` is on AND its ad
+ *     unit ID below is filled in. The switches are the app's own (`searchNativeEnabled`,
+ *     `detailGridEnabled`, served by /api/config, OFF on any error), so one switch controls a
+ *     placement in the app and on the website together — flipped from the app's Ad controls screen or
+ *     the website's (AdControls, Account page, admins only). Until the AdSense units exist, the
+ *     empty IDs keep the website dark whatever the switches say.
  *   - "No trace" while off: the AdSense script is injected only when a placement is about to render,
  *     so with both off no request ever goes to Google's ad servers.
  *   - Same placements as the app: listing detail ("Sponsored", under the listing) and search
  *     results (after 4 listings, then every 8 — adslots.ts). Never on sign-in, account, donate or
  *     error pages, and never in the server-rendered HTML.
  *   - Consent: AdSense shows Google's certified consent message (set up in AdSense → Privacy &
- *     messaging) to UK / EEA visitors itself, the web equivalent of the app's UMP form.
+ *     messaging) itself — the web twin of the app's UMP form — and AdPrivacyLink in the footer
+ *     reopens it so visitors can change their choice.
  *   - Off the real domain (the web.app test address, localhost) ads run in AdSense test mode, like the
  *     app's debug build using test ad units — never click live ads on your own site.
  */
@@ -75,7 +79,28 @@ function loadAdSense(): void {
 }
 
 declare global {
-  interface Window { adsbygoogle?: unknown[] }
+  interface Window {
+    adsbygoogle?: unknown[];
+    googlefc?: { callbackQueue?: (() => void)[]; showRevocationMessage?: () => void };
+  }
+}
+
+/**
+ * Footer link that reopens Google's consent message (AdSense → Privacy & messaging), so a visitor can
+ * change or withdraw their ad consent at any time. Shown only while ads are switched on — with ads
+ * off nothing was ever asked.
+ */
+export function AdPrivacyLink() {
+  const ads = useAdPlacements();
+  if (!ads.detail && !ads.search) return null;
+  const open = (e: Event) => {
+    e.preventDefault();
+    loadAdSense();
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push(() => window.googlefc?.showRevocationMessage?.());
+  };
+  return <> · <a href="/privacy/" onClick={open}>Privacy &amp; cookie settings</a></>;
 }
 
 /** One ad unit. Collapses to nothing if AdSense has no ad to show (data-ad-status="unfilled"). */
