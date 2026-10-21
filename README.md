@@ -40,6 +40,21 @@ The web app: `web/src/` — `main.tsx` (routes), `pages/`, `search.ts` (port of 
 `auth.ts` (sign-in, same rules as the app), `data.ts` (signed-in Firestore reads/writes),
 `session.ts`. Browsing never loads the Firebase SDK; it runs on the public `/api/*`.
 
+### Ads (Google AdSense — ships dark)
+
+The website shows Google AdSense ads in the same two places the app shows AdMob ads: in the results
+grid (after 4 listings, then every 8) and one "Sponsored" unit on each listing page. Same Google
+account and publisher ID (`pub-5319059698255764`) as the app. Code: `web/src/ads.tsx`,
+`web/src/adslots.ts`.
+
+A placement shows only when **both** are true:
+1. its switch is on in Firestore `config/ads` — `webSearchEnabled` / `webDetailEnabled` (separate
+   from the app's `detailGridEnabled` / `searchNativeEnabled`; set them in the Firebase console), and
+2. its ad unit ID is filled in `AD_UNITS` in `web/src/ads.tsx` (then rebuild + deploy).
+
+While off, the AdSense script is never loaded. Off the real domain (e.g. `farmflow-51796.web.app`)
+ads run in AdSense test mode. `ads.txt` (and `app-ads.txt` for AdMob) are at the site root.
+
 ---
 
 The rest of this README describes the static marketing pages.

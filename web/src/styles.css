@@ -173,3 +173,10 @@ button, input, select { font: inherit; color: inherit; }
 .install-close { position: absolute; top: 4px; right: 4px; width: 36px; height: 36px; border: 0; background: none; font-size: 1.4rem; color: var(--ink-soft); cursor: pointer; }
 .ios-share { font-weight: 800; }
 .ios-share::before { content: "⬆︎"; margin-right: 2px; }
+
+/* ---------- ads (ads.tsx) ---------- */
+.ad-slot { margin: 20px 0 8px; }
+.ad-label { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+.ad-card { margin: 0; padding: 8px 10px 10px; min-height: 0; }
+/* Nothing to show (no fill, or an ad blocker): take no space, as the app's ad slots collapse. */
+.ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }

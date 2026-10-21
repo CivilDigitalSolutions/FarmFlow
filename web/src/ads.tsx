@@ -1,0 +1,100 @@
+/*
+ * Website ads — Google AdSense, the web counterpart of the app's AdMob (same Google account and
+ * publisher ID, same advertisers). Built like the app's ads (README "Feature 2"):
+ *
+ *   - Ships DARK. A placement shows only when its switch in Firestore `config/ads` is on
+ *     (`webDetailEnabled` / `webSearchEnabled`, served by /api/config, OFF on any error) AND its ad
+ *     unit ID below is filled in. The app's own switches don't affect the website and vice versa.
+ *   - "No trace" while off: the AdSense script is injected only when a placement is about to render,
+ *     so with both off no request ever goes to Google's ad servers.
+ *   - Same placements as the app: listing detail ("Sponsored", under the listing) and search
+ *     results (after 4 listings, then every 8 — adslots.ts). Never on sign-in, account, donate or
+ *     error pages, and never in the server-rendered HTML.
+ *   - Consent: AdSense shows Google's certified consent message (set up in AdSense → Privacy &
+ *     messaging) to UK / EEA visitors itself, the web equivalent of the app's UMP form.
+ *   - Off the real domain (the web.app test address, localhost) ads run in AdSense test mode, like the
+ *     app's debug build using test ad units — never click live ads on your own site.
+ */
+import { useEffect, useRef, useState } from 'preact/hooks';
+
+/** The AdSense publisher ID — the same `pub-` number as the app's AdMob IDs. */
+export const ADSENSE_CLIENT = 'ca-pub-5319059698255764';
+
+/**
+ * Ad units, created in AdSense → Ads → By ad unit. Paste each unit's `data-ad-slot` (and, for the
+ * in-feed unit, its `data-ad-layout-key`). An empty slot keeps that placement off.
+ */
+export const AD_UNITS = {
+  /** Listing detail: a "Display ads" unit, responsive. */
+  detail: { slot: '' },
+  /** Search results: an "In-feed ads" unit styled to sit in the listing grid. */
+  search: { slot: '', layoutKey: '' },
+} as const;
+
+const PRODUCTION_HOST = 'www.farmflowcaribbean.com';
+
+export interface WebAdsConfig {
+  detail: boolean;
+  search: boolean;
+}
+
+const OFF: WebAdsConfig = { detail: false, search: false };
+let configPromise: Promise<WebAdsConfig> | null = null;
+
+function fetchAdsConfig(): Promise<WebAdsConfig> {
+  configPromise ??= fetch('/api/config', { headers: { Accept: 'application/json' } })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((b) => ({ detail: b?.ads?.detail === true, search: b?.ads?.search === true }))
+    .catch(() => OFF); // fail-safe: no ads
+  return configPromise;
+}
+
+/** Which placements may render right now: switched on AND an ad unit configured. */
+export function useAdPlacements(): WebAdsConfig {
+  const [config, setConfig] = useState<WebAdsConfig>(OFF);
+  useEffect(() => {
+    let live = true;
+    fetchAdsConfig().then((c) => {
+      if (live) setConfig({ detail: c.detail && !!AD_UNITS.detail.slot, search: c.search && !!AD_UNITS.search.slot });
+    });
+    return () => { live = false; };
+  }, []);
+  return config;
+}
+
+let scriptInjected = false;
+
+function loadAdSense(): void {
+  if (scriptInjected) return;
+  scriptInjected = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.crossOrigin = 'anonymous';
+  s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+  document.head.appendChild(s);
+}
+
+declare global {
+  interface Window { adsbygoogle?: unknown[] }
+}
+
+/** One ad unit. Collapses to nothing if AdSense has no ad to show (data-ad-status="unfilled"). */
+export function AdSlot({ unit, class: cls }: { unit: 'detail' | 'search'; class?: string }) {
+  const ref = useRef<HTMLModElement>(null);
+  useEffect(() => {
+    loadAdSense();
+    if (ref.current && !ref.current.dataset.adsbygoogleStatus) {
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* blocked by an ad blocker */ }
+    }
+  }, []);
+  const test = location.hostname !== PRODUCTION_HOST ? { 'data-adtest': 'on' } : {};
+  const attrs = unit === 'search'
+    ? { 'data-ad-slot': AD_UNITS.search.slot, 'data-ad-format': 'fluid', 'data-ad-layout-key': AD_UNITS.search.layoutKey }
+    : { 'data-ad-slot': AD_UNITS.detail.slot, 'data-ad-format': 'auto', 'data-full-width-responsive': 'true' };
+  return (
+    <aside class={`ad-slot ${cls ?? ''}`} aria-label="Advertisement">
+      <span class="ad-label">Sponsored</span>
+      <ins ref={ref} class="adsbygoogle" style={{ display: 'block' }} data-ad-client={ADSENSE_CLIENT} {...attrs} {...test} />
+    </aside>
+  );
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { NotFoundError, fetchListing } from '../api.ts';
+import { AdSlot, useAdPlacements } from '../ads.tsx';
 import { Badge, Page, Spinner, place } from '../components.tsx';
 import { contactDigits, smsUrl, whatsAppUrl } from '../format.ts';
 import type { Location } from '../router.ts';
@@ -29,6 +30,7 @@ export function ListingPage({ loc, initial }: { loc: Location; initial: ListingD
   const [data, setData] = useState<ListingData | null>(initial?.listing.id === id ? initial : null);
   const [gone, setGone] = useState(false);
   const [error, setError] = useState(false);
+  const ads = useAdPlacements();
 
   useEffect(() => {
     if (data?.listing.id === id) return;
@@ -75,6 +77,7 @@ export function ListingPage({ loc, initial }: { loc: Location; initial: ListingD
           <ContactAndSeller listingId={l.id} title={l.title} priceLabel={l.priceLabel} path={l.path} />
           {l.description && <><h2>About this produce</h2><p class="desc">{l.description}</p></>}
           <ShareButton title={l.title} path={l.path} />
+          {ads.detail && <AdSlot key={l.id} unit="detail" />}
         </section>
       </div>
     </Page>

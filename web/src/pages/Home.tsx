@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { fetchMarket, fetchMeta } from '../api.ts';
+import { AdSlot, useAdPlacements } from '../ads.tsx';
+import { SEARCH_AD_COUNT, interleaveAds } from '../adslots.ts';
 import { Card, InstallHint, Page, Spinner } from '../components.tsx';
 import { store } from '../format.ts';
 import { navigate, type Location } from '../router.ts';
@@ -21,6 +23,7 @@ export function Home({ loc }: { loc: Location }) {
   const [deviceOrigin, setDeviceOrigin] = useState<LatLng | null>(null);
   const [locating, setLocating] = useState(false);
   const [locateMessage, setLocateMessage] = useState<string | null>(null);
+  const ads = useAdPlacements();
 
   const q = loc.search.get('q') ?? '';
   const category = loc.search.get('category');
@@ -187,8 +190,10 @@ export function Home({ loc }: { loc: Location }) {
         <>
           <p class="count">{results.length} item{results.length === 1 ? '' : 's'} in stock{islandInfo ? ` in ${islandInfo.name}` : ''}</p>
           <div class="grid">
-            {results.map((r) => (
-              <Card key={r.listing.id} listing={r.listing} distanceKm={r.distanceKm} displayCurrency={islandInfo?.currency ?? null} />
+            {interleaveAds(results, ads.search ? SEARCH_AD_COUNT : 0).map((e) => e.kind === 'ad' ? (
+              <AdSlot key={`ad-${e.slot}`} unit="search" class="card ad-card" />
+            ) : (
+              <Card key={e.value.listing.id} listing={e.value.listing} distanceKm={e.value.distanceKm} displayCurrency={islandInfo?.currency ?? null} />
             ))}
           </div>
         </>
