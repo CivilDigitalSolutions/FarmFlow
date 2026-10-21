@@ -171,7 +171,7 @@
         <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
       </div>
       <h2 id="verifyDoneTitle">Email verified</h2>
-      <p class="auth-lede"><span class="auth-email" id="verifyEmail">Your email</span> is now verified. Open FarmFlow to continue — your verified badge updates automatically.</p>
+      <p class="auth-lede"><span class="auth-email" id="verifyEmail">Your email</span> is now verified. Open FarmFlow to continue — the app picks up your verified email automatically.</p>
       <div class="success-actions">
         <a id="verifyContinue" class="btn-primary btn-block" href="#">Open FarmFlow</a>
       </div>
@@ -198,7 +198,7 @@
       <h2 id="invalidTitle">This link can’t be used</h2>
       <p class="auth-lede" id="invalidMsg">This link is invalid or has already been used. Reset and verification links also expire for your security.</p>
       <div class="success-actions">
-        <p class="hint" id="invalidHint">Open the FarmFlow app and request a new link — for a password, tap “Forgot password?”; to verify your email, use “Resend verification email”.</p>
+        <p class="hint" id="invalidHint">Open the FarmFlow app and request a new link — for a password, tap “Forgot password?”; to verify your email, tap “Resend email” on the verification prompt, or contact support for a new link.</p>
         <a class="btn-gold btn-block" style="margin-top:14px" href="https://play.google.com/store/apps/details?id=com.civildigital.farmflow">Open FarmFlow on Google Play</a>
       </div>
     </section>
@@ -403,7 +403,7 @@
       } catch (e){
         showInvalid(
           "This verification link is invalid or has expired.",
-          "Open FarmFlow and use “Resend verification email” to get a new one.");
+          "Open FarmFlow and tap “Resend email” on the verification prompt, or contact support for a new link.");
       }
       return;
     }
