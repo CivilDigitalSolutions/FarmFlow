@@ -144,6 +144,7 @@ now only needed for any legacy install still pinned to that host; keep the
 
 - Do **not** import any Civil Digital CSS, headers, or nav into the support pages. The single shared element is the footer line "FarmFlow is operated by Civil Digital". (`listing/index.html` is the one deliberate exception — it uses the Civil Digital stylesheet.)
 - Fonts are loaded from Google Fonts (Bricolage Grotesque + Nunito Sans). If self-hosting fonts is preferred, download the two families and update the `<link>` tags and CSS `font-family` stacks.
+- Every page links the stylesheet as `/assets/farmflow.css?v=YYYYMMDD`. When you change `farmflow.css`, bump that date on every page (find & replace), or browsers holding the old copy will show new markup with old styles.
 - The logo is currently a simplified inline SVG recreation. Replace with the real FarmFlow logo asset (SVG or PNG) in `index.html` (`.mark`) when available.
 
 ## Produce photos (`images/produce/`)

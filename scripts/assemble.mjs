@@ -48,8 +48,8 @@ const about = readFileSync(join(ROOT, 'index.html'), 'utf8')
   .replace(`<link rel="canonical" href="${SITE}/">`, `<link rel="canonical" href="${SITE}/about/">`)
   .replace(`<meta property="og:url" content="${SITE}/">`, `<meta property="og:url" content="${SITE}/about/">`)
   // One level deeper than at the root, so the stylesheet must not resolve to /about/assets/.
-  .replace('href="assets/farmflow.css"', 'href="/assets/farmflow.css"');
-if (!about.includes(`${SITE}/about/"`) || !about.includes('href="/assets/farmflow.css"')) {
+  .replace('href="assets/farmflow.css', 'href="/assets/farmflow.css');
+if (!about.includes(`${SITE}/about/"`) || !about.includes('href="/assets/farmflow.css')) {
   console.error('index.html: canonical / og:url / stylesheet link not found — update scripts/assemble.mjs.');
   process.exit(1);
 }
