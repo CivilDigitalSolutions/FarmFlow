@@ -24,7 +24,8 @@ import { USE_EMULATORS, app } from './firebase.ts';
 import { slugify } from './format.ts';
 import type { Verification } from './types.ts';
 
-const db = getFirestore(app);
+/** Shared with sell.ts (the seller tools), which loads on top of this module. */
+export const db = getFirestore(app);
 if (USE_EMULATORS) connectFirestoreEmulator(db, location.hostname, 8080);
 
 export interface UserProfile {
