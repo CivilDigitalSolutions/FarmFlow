@@ -275,6 +275,18 @@ img,svg{max-width:100%}
 .prose .guide-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px;background:#E4E1D9}
 .prose .guide-photo figcaption{margin-top:8px;font-size:.82rem;color:var(--ink-soft);text-align:center}
 
+/* ---------- app screenshots (images/app/, scripts/app-screens.py) in a CSS phone frame ---------- */
+.app-shots{margin:26px 0 30px}
+.app-shots .row{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
+.app-shot{margin:0;width:min(210px,calc(50% - 9px));text-align:center}
+.app-shot:only-child{width:min(210px,62%)}
+.app-shot img{
+  display:block;width:100%;height:auto;aspect-ratio:9/16;
+  border:7px solid #1C2A20;border-radius:26px;background:#fff;box-shadow:var(--shadow-lift);
+}
+.app-shot figcaption{margin-top:10px;font-size:.84rem;font-weight:700;color:var(--green-deep)}
+.app-shots .note{margin:12px 0 0;font-size:.78rem;color:var(--ink-soft);text-align:center}
+
 .meta-line{
   font-size:.82rem;color:var(--ink-soft);
   border-bottom:1px solid var(--line);
