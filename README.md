@@ -175,6 +175,25 @@ Stock photos are used only on the marketing pages. Marketplace listings never sh
 without the seller's own photo keeps its category emoji, so buyers can tell a real photo from an
 illustration.
 
+## Guide photos (`images/guides/`)
+
+The guide pages (`/guides/…`) carry black-and-white, slightly faded photos of farmers and market
+vendors, also from Pexels under the same licence. `scripts/guide-photos.py SOURCE_DIR` makes them
+from the original downloads (3:2 crop, greyscale + fade baked into the files, 760/1520 px WebP +
+1520 px JPEG). Keep captions general: none of these photos was taken in the Caribbean, so never
+caption one with a place or call the people in it FarmFlow users.
+
+| Image | Page / place | Pexels photo |
+|---|---|---|
+| `cassava-harvest` | Guides index | https://www.pexels.com/photo/36846177/ |
+| `root-crop-harvest` | Ground provisions — before "What counts" | https://www.pexels.com/photo/11798034/ |
+| `yam-market` | Ground provisions — before "Why the term matters" | https://www.pexels.com/photo/30179958/ |
+| `market-shopper` | Ground provisions — before the closing links | https://www.pexels.com/photo/34423206/ |
+| `farmer-digging` | Sell yam — after the intro | https://www.pexels.com/photo/2382665/ |
+| `plantain-farmer` | Sell yam — Step 2 (photos) | https://www.pexels.com/photo/3963167/ |
+| `market-trade` | Sell yam — Step 4 (meet and trade) | https://www.pexels.com/photo/13103276/ |
+| `tractor` | Sell yam — Step 5 (fresh harvest) | https://www.pexels.com/photo/2252618/ |
+
 ## Placeholders to replace (find & replace across all files)
 
 | Token | Meaning |

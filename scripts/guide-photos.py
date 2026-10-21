@@ -19,9 +19,11 @@ RATIO = 3 / 2
 # Fade: lower the contrast, then lift the blacks and soften the whites (a matte look).
 CONTRAST = 0.88
 BLACK, WHITE = 34, 238
+# Where to centre the 3:2 crop in a tall photo (0 = top, 1 = bottom); default is the middle.
+FOCUS_Y = {'farmer-digging': 0.37}
 
 
-def treat(img: Image.Image) -> Image.Image:
+def treat(img: Image.Image, focus_y: float = 0.5) -> Image.Image:
     img = ImageOps.exif_transpose(img).convert('RGB')
     w, h = img.size
     if w / h > RATIO:
@@ -29,7 +31,8 @@ def treat(img: Image.Image) -> Image.Image:
         img = img.crop(((w - cw) // 2, 0, (w - cw) // 2 + cw, h))
     else:
         ch = round(w / RATIO)
-        img = img.crop((0, (h - ch) // 2, w, (h - ch) // 2 + ch))
+        top = min(max(round(h * focus_y - ch / 2), 0), h - ch)
+        img = img.crop((0, top, w, top + ch))
     grey = ImageEnhance.Contrast(ImageOps.grayscale(img)).enhance(CONTRAST)
     return grey.point(lambda v: round(BLACK + v * (WHITE - BLACK) / 255))
 
@@ -39,7 +42,7 @@ def main(src: Path) -> None:
     for f in sorted(src.iterdir()):
         if f.suffix.lower() not in {'.jpg', '.jpeg', '.png', '.webp'}:
             continue
-        img = treat(Image.open(f))
+        img = treat(Image.open(f), FOCUS_Y.get(f.stem, 0.5))
         for width in (760, 1520):
             out = img.resize((width, round(width / RATIO)), Image.LANCZOS)
             out.save(OUT / f'{f.stem}-{width}.webp', 'WEBP', quality=72, method=6)
