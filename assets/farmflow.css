@@ -270,6 +270,10 @@ img,svg{max-width:100%}
 .prose th,.prose td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line)}
 .prose th{background:var(--green-soft);color:var(--green-deep);font-family:"Bricolage Grotesque",sans-serif}
 .prose tr:last-child td{border-bottom:none}
+/* Guide photos: black-and-white, faded (baked into the files — scripts/guide-photos.py). */
+.prose .guide-photo{margin:24px 0 28px}
+.prose .guide-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px;background:#E4E1D9}
+.prose .guide-photo figcaption{margin-top:8px;font-size:.82rem;color:var(--ink-soft);text-align:center}
 
 .meta-line{
   font-size:.82rem;color:var(--ink-soft);
