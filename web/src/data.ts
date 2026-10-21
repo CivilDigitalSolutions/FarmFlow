@@ -121,15 +121,23 @@ export async function loadListingSeller(listingId: string): Promise<ListingSelle
   const listing = await getDoc(doc(db, 'listings', listingId));
   const sellerId = listing.data()?.sellerId;
   if (typeof sellerId !== 'string' || !sellerId) return null;
-  const snap = await getDoc(doc(db, 'sellers', sellerId));
+  const [snap, contact] = await Promise.all([
+    getDoc(doc(db, 'sellers', sellerId)),
+    // The number lives in sellers/{id}/private/contact, readable only by signed-in non-guests
+    // (firestore.rules). A failed read just means no contact buttons, never a broken page.
+    getDoc(doc(db, 'sellers', sellerId, 'private', 'contact')).catch(() => null),
+  ]);
   const s = snap.data();
   if (!s) return null;
   const name = typeof s.name === 'string' ? s.name : '';
   const verification = ['VERIFIED', 'COMMERCIAL'].includes(s.verification) ? s.verification : 'UNVERIFIED';
+  const privatePhone = contact?.data()?.contactPhone;
   return {
     id: sellerId,
     name,
-    contactPhone: typeof s.contactPhone === 'string' ? s.contactPhone : '',
+    // Falls back to the public copy only while older app versions still keep it (step 1).
+    contactPhone: typeof privatePhone === 'string' && privatePhone ? privatePhone
+      : typeof s.contactPhone === 'string' ? s.contactPhone : '',
     verification,
     photoUrl: typeof s.photoUrl === 'string' && s.photoUrl ? s.photoUrl : null,
     yearsOnPlatform: Number(s.yearsOnPlatform) || 0,
