@@ -23,6 +23,8 @@ export type Session =
     profile: UserProfile | null | undefined;
     /** The profile couldn't be read (offline, flaky network). Retry with refreshSession(). */
     profileError?: boolean;
+    /** A one-off message for the top of the page (e.g. a cancelled account deletion). */
+    notice?: string;
   };
 
 const SESSION_FLAG = 'ff.session';
@@ -73,9 +75,17 @@ export function authModule() {
           hasPassword: user.providerData.some((p) => p.providerId === 'password'),
         };
         set({ ...base, profile: undefined });
+        // Signing back in within 14 days of asking to delete the account cancels the deletion.
+        const lastSignIn = Date.parse(user.metadata.lastSignInTime ?? '') || 0;
+        const cancelled = await dataModule()
+          .then((d) => d.cancelDeletionIfSignedInSince(user.uid, lastSignIn))
+          .catch(() => false);
+        const notice = cancelled ? 'Welcome back — your account deletion request has been cancelled.' : undefined;
         const profile = await loadProfileWithRetry(user.uid);
         if (getSession().status !== 'signedIn') return;
-        set(profile === 'error' ? { ...base, profile: undefined, profileError: true } : { ...base, profile });
+        set(profile === 'error'
+          ? { ...base, profile: undefined, profileError: true, notice }
+          : { ...base, profile, notice });
       });
       return m;
     });
@@ -105,6 +115,11 @@ export function dataModule() {
 export function sellModule() {
   sellPromise ??= import('./sell.ts');
   return sellPromise;
+}
+
+/** Dismisses the session's one-off notice. */
+export function clearNotice(): void {
+  if (session.status === 'signedIn' && session.notice) set({ ...session, notice: undefined });
 }
 
 /** Re-read the current user (after email verification) and the profile (after setup). */

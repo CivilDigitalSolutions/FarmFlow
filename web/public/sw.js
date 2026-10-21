@@ -9,11 +9,15 @@
  *   page navigations (same origin)   network-first, falling back to the last copy of that page, then to
  *                                     the cached home page (the app shell)
  *
+ * Push notifications (Firebase Cloud Messaging, see src/push.ts): every push is shown — iPhone /
+ * iPad require it — with FarmFlow's icon and the monochrome sunrise badge; a tap focuses an open
+ * FarmFlow window (or opens one) on the notification's link, /notifications by default.
+ *
  * Never touched: anything cross-origin (Firebase Auth / Firestore / Storage, Stripe, fonts), any
  * non-GET request (sign-in, donations), and Firebase Hosting's reserved /__/ paths (the auth handler).
  * Bump VERSION to drop every old cache on the next visit.
  */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const STATIC = `ff-static-${VERSION}`;
 const DATA = `ff-data-${VERSION}`;
 const PAGES = `ff-pages-${VERSION}`;
@@ -80,4 +84,43 @@ self.addEventListener('fetch', (event) => {
   } else if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request, PAGES, '/'));
   }
+});
+
+// ---- Push notifications ----
+const PUSH_ICON = '/icons/icon-192.png';
+const PUSH_BADGE = '/icons/badge-96.png';
+const PUSH_LINK = '/notifications';
+
+self.addEventListener('push', (event) => {
+  let msg = {};
+  try { msg = event.data ? event.data.json() : {}; } catch { msg = { notification: { body: event.data && event.data.text() } }; }
+  const n = msg.notification || {};
+  const data = msg.data || {};
+  // Only ever open our own pages from a notification.
+  let link = PUSH_LINK;
+  try {
+    const u = new URL(data.link || (msg.fcmOptions && msg.fcmOptions.link) || PUSH_LINK, self.location.origin);
+    if (u.origin === self.location.origin) link = u.pathname + u.search;
+  } catch { /* keep the default */ }
+  event.waitUntil(self.registration.showNotification(n.title || 'FarmFlow', {
+    body: n.body || '',
+    icon: n.icon || PUSH_ICON,
+    badge: n.badge || PUSH_BADGE,
+    tag: msg.fcmMessageId || undefined,
+    data: { link },
+  }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const link = (event.notification.data && event.notification.data.link) || PUSH_LINK;
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const open = windows.find((w) => new URL(w.url).origin === self.location.origin);
+    if (open) {
+      await open.focus();
+      return open.navigate(link).catch(() => undefined);
+    }
+    return self.clients.openWindow(link);
+  })());
 });

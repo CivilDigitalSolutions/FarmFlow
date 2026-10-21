@@ -9,16 +9,21 @@
  */
 import {
   addDoc,
-  connectFirestoreEmulator,
   collection,
+  connectFirestoreEmulator,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
+  query,
   runTransaction,
   serverTimestamp,
   setDoc,
+  updateDoc,
+  writeBatch,
 } from 'firebase/firestore/lite';
 import { USE_EMULATORS, app } from './firebase.ts';
 import { slugify } from './format.ts';
@@ -178,4 +183,90 @@ export async function loadAdSwitches(): Promise<Record<AdSwitch, boolean>> {
 /** FirebaseRepository.setAdEnabled, field for field: admin-only by firestore.rules. */
 export async function setAdSwitch(field: AdSwitch, enabled: boolean, adminUid: string): Promise<void> {
   await setDoc(doc(db, 'config', 'ads'), { [field]: enabled, updatedAt: serverTimestamp(), updatedBy: adminUid }, { merge: true });
+}
+
+// ---- Self-service account deletion, 14-day grace (FarmFlow-App functions/account/deletion.js) ----
+
+/** The moderationReason the server sets on a seller while their deletion is pending. */
+const ACCOUNT_DELETION_REASON = 'Account deletion requested';
+
+/**
+ * Files deletionRequests/{uid} (rules: exactly {requestedAt: request.time, source}). The server then
+ * deactivates the account at once — listings and stall hidden, every session revoked — and deletes it
+ * permanently 14 days later unless the user signs back in.
+ */
+export async function requestAccountDeletion(uid: string): Promise<void> {
+  await setDoc(doc(db, 'deletionRequests', uid), { requestedAt: serverTimestamp(), source: 'web' });
+}
+
+/**
+ * Signing back in within the 14 days cancels a pending deletion — but only a sign-in made AFTER the
+ * request (`lastSignInMs`), so a tab left open elsewhere can't cancel it by merely restoring its
+ * session. Returns true when a request was withdrawn; then waits briefly for the server to put the
+ * seller back (onAccountDeletionCancelled), so the account doesn't open on its deactivated state.
+ */
+export async function cancelDeletionIfSignedInSince(uid: string, lastSignInMs: number): Promise<boolean> {
+  const ref = doc(db, 'deletionRequests', uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return false;
+  const requestedAt = snap.data()?.requestedAt;
+  const requestedMs = requestedAt && typeof requestedAt.toMillis === 'function' ? requestedAt.toMillis() : 0;
+  if (!(lastSignInMs > requestedMs)) return false;
+  await deleteDoc(ref);
+  for (let i = 0; i < 15; i++) {
+    const seller = await getDoc(doc(db, 'sellers', uid)).catch(() => null);
+    if (!seller?.exists() || seller.data()?.moderationReason !== ACCOUNT_DELETION_REASON) break;
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+  return true;
+}
+
+// ---- Notifications (the same users/{uid}/notifications the app shows; owner-only in the rules) ----
+
+export interface AppNotification {
+  id: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: number;
+}
+
+/** The latest 50, newest first. */
+export async function loadNotifications(uid: string): Promise<AppNotification[]> {
+  const snap = await getDocs(query(collection(db, 'users', uid, 'notifications'), orderBy('createdAt', 'desc'), limit(50)));
+  return snap.docs.flatMap((d) => {
+    const n = d.data();
+    if (typeof n.title !== 'string') return []; // toNotificationOrNull
+    const at = n.createdAt;
+    return [{
+      id: d.id,
+      title: n.title,
+      message: typeof n.message === 'string' ? n.message : '',
+      read: n.read === true,
+      createdAt: at && typeof at.toMillis === 'function' ? at.toMillis() : Number(at) || 0,
+    }];
+  });
+}
+
+export async function markNotificationsRead(uid: string, ids: string[]): Promise<void> {
+  if (!ids.length) return;
+  const batch = writeBatch(db);
+  for (const id of ids) batch.update(doc(db, 'users', uid, 'notifications', id), { read: true });
+  await batch.commit();
+}
+
+/** The app's Settings → Notifications preferences (users/{uid}); absent means on. */
+export type NotifyPref = 'notifyFavourites' | 'notifyExpiry' | 'notifyAnnouncements';
+
+export async function loadNotifyPrefs(uid: string): Promise<Record<NotifyPref, boolean>> {
+  const d = (await getDoc(doc(db, 'users', uid))).data() ?? {};
+  return {
+    notifyFavourites: d.notifyFavourites !== false,
+    notifyExpiry: d.notifyExpiry !== false,
+    notifyAnnouncements: d.notifyAnnouncements !== false,
+  };
+}
+
+export async function setNotifyPref(uid: string, field: NotifyPref, value: boolean): Promise<void> {
+  await updateDoc(doc(db, 'users', uid), { [field]: value });
 }

@@ -107,14 +107,64 @@ export function Account() {
 
       <p class="row">
         <a class="btn btn-outline" href="/donate">Support FarmFlow</a>
+        <a class="btn btn-outline" href="/notifications">Notifications</a>
         <button type="button" class="btn btn-ghost" onClick={async () => {
           // Leave the page first: once signed out, this page's own guard would bounce to /signin.
           navigate('/');
+          // Stop this browser's pushes while still signed in, as the app does on sign-out.
+          await import('../push.ts').then((m) => m.disablePush(session.uid)).catch(() => undefined);
           await (await authModule()).signOut();
         }}>Sign out</button>
       </p>
-      <p class="hint">To delete your account, see <a href="/account-deletion/">account deletion</a>.</p>
+      <DeleteAccount uid={session.uid} />
     </Page>
+  );
+}
+
+/**
+ * Account → Delete my account (14-day grace, same as the app's Settings → Delete my account). Files
+ * deletionRequests/{uid}; the server deactivates the account at once and deletes it after 14 days.
+ * Signing back in before then cancels (session.ts).
+ */
+function DeleteAccount({ uid }: { uid: string }) {
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  if (!confirming) {
+    return (
+      <p class="hint">
+        <button type="button" class="link" onClick={() => setConfirming(true)}>Delete my account</button>
+        {' '}· <a href="/account-deletion/">How account deletion works</a>
+      </p>
+    );
+  }
+  const go = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await (await dataModule()).requestAccountDeletion(uid);
+      // Leave first: once signed out, this page's own guard would bounce to /signin without the note.
+      navigate('/signin?deleted=1', { replace: true });
+      await (await authModule()).signOut();
+    } catch {
+      setError('Couldn’t request deletion. Check your connection and try again.');
+      setBusy(false);
+    }
+  };
+  return (
+    <section class="notice-box danger-zone" aria-labelledby="delete-title">
+      <strong id="delete-title">Delete your account?</strong>
+      <p>Your account is deactivated straight away — your listings and stall are hidden and you’ll be
+        signed out — and then permanently deleted after 14 days, with your listings, photos and
+        personal data. Changed your mind? Just sign back in within 14 days and everything is restored.</p>
+      {error && <p class="error" role="alert">{error}</p>}
+      <p class="row">
+        <button type="button" class="btn btn-small btn-danger" disabled={busy} onClick={go}>
+          {busy ? 'Deleting…' : 'Delete my account'}
+        </button>
+        <button type="button" class="btn btn-small btn-ghost" disabled={busy} onClick={() => setConfirming(false)}>Cancel</button>
+      </p>
+    </section>
   );
 }
 

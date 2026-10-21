@@ -3,7 +3,7 @@ import { AdPrivacyLink } from './ads.tsx';
 import { useEffect, useState } from 'preact/hooks';
 import { PLAY_URL, isAndroid, isIos, isStandalone, store } from './format.ts';
 import { formatDistance, priceEstimateLabel } from './search.ts';
-import { refreshSession, useSession } from './session.ts';
+import { clearNotice, refreshSession, useSession } from './session.ts';
 import type { PublicListing, Verification } from './types.ts';
 
 // Class names match functions/web/render.js (the server-rendered pages) so the app takes over a
@@ -91,7 +91,19 @@ export function Card({ listing, distanceKm, displayCurrency }: {
 }
 
 export function Page({ class: cls, children }: { class?: string; children: ComponentChildren }) {
-  return <main class={`page ${cls ?? ''}`}>{children}</main>;
+  return <main class={`page ${cls ?? ''}`}><SessionNotice />{children}</main>;
+}
+
+/** The session's one-off notice (e.g. "your account deletion request has been cancelled"). */
+function SessionNotice() {
+  const session = useSession();
+  if (session.status !== 'signedIn' || !session.notice) return null;
+  return (
+    <aside class="notice-box session-notice" role="status">
+      <p>{session.notice}</p>
+      <button type="button" class="btn btn-small btn-ghost" onClick={clearNotice}>Dismiss</button>
+    </aside>
+  );
 }
 
 /** Shown when the signed-in user's profile couldn't be read — never treated as "no profile". */
@@ -113,12 +125,52 @@ export function Spinner({ label = 'Loading…' }: { label?: string }) {
   return <p class="loading" role="status"><span class="spinner" aria-hidden="true" />{label}</p>;
 }
 
+const APP_PROMO_DISMISSED = 'ff-app-promo-dismissed'; // shared with the marketing pages' assets/app-promo.js
+const APP_PROMO_SNOOZE_MS = 30 * 24 * 60 * 60 * 1000;
+
+/**
+ * "Get the Android app" corner card with the official Google Play badge — the web app's twin of the
+ * marketing pages' assets/app-promo.js (same storage key, so closing it anywhere on the site closes
+ * it everywhere for 30 days). Android and desktop only: iPhone / iPad have no Android app, and the
+ * installed web app is already "the app".
+ */
+export function AppPromo() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (isIos() || isStandalone()) return;
+    const at = Number(store.get(APP_PROMO_DISMISSED));
+    if (at && Date.now() - at < APP_PROMO_SNOOZE_MS) return;
+    const t = setTimeout(() => setOpen(true), 2500);
+    return () => clearTimeout(t);
+  }, []);
+  if (!open) return null;
+  return (
+    <aside class="app-promo is-open" aria-label="Get the FarmFlow Android app">
+      <button type="button" class="app-promo-close" aria-label="Close" onClick={() => {
+        store.set(APP_PROMO_DISMISSED, String(Date.now()));
+        setOpen(false);
+      }}>×</button>
+      <img class="app-promo-icon" src="/icons/icon-192.png" width={44} height={44} alt="" />
+      <div class="app-promo-text">
+        <strong>Get the FarmFlow app</strong>
+        <span>Buy and sell on Android — free.</span>
+        <a class="app-promo-badge" href={PLAY_URL} rel="noopener">
+          <picture>
+            <source type="image/webp" srcset="/images/google-play-badge-162.webp 1x, /images/google-play-badge-324.webp 2x" />
+            <img src="/images/google-play-badge-162.png" srcset="/images/google-play-badge-324.png 2x" width={162} height={63} alt="Get it on Google Play" />
+          </picture>
+        </a>
+      </div>
+    </aside>
+  );
+}
+
 const INSTALL_DISMISSED = 'ff.installHintDismissed';
 
 /**
  * "Install FarmFlow" prompt. iPhone / iPad have no install button, so Safari users get the
- * Share → Add to Home Screen instructions. Android visitors are pointed at the Play app, which is the
- * full experience there. Other browsers that support it get a one-tap install. Dismissal is remembered.
+ * Share → Add to Home Screen instructions. Android visitors get the AppPromo card (the Play app)
+ * instead. Other browsers that support it get a one-tap install. Dismissal is remembered.
  */
 export function InstallHint() {
   const [dismissed, setDismissed] = useState(() => store.get(INSTALL_DISMISSED) === '1' || isStandalone());
@@ -142,12 +194,7 @@ export function InstallHint() {
       </p>
     );
   } else if (isAndroid()) {
-    body = (
-      <p>
-        <strong>On Android?</strong> The FarmFlow app adds notifications and seller analytics.{' '}
-        <a href={PLAY_URL} rel="noopener">Get it on Google Play</a>
-      </p>
-    );
+    return null; // Android visitors get the AppPromo card instead
   } else if (prompt) {
     body = (
       <p>

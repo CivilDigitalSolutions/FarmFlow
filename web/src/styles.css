@@ -232,3 +232,43 @@ button, input, select { font: inherit; color: inherit; }
 .photo-state { position: absolute; inset: auto 0 0 0; background: rgba(255,255,255,.88); font-size: .72rem; font-weight: 700; text-align: center; padding: 2px; }
 .photo-error { color: var(--error); }
 .photo-remove { position: absolute; top: 4px; right: 4px; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 1.2rem; cursor: pointer; }
+
+/* "Get the Android app" corner card (AppPromo) — twin of the marketing pages' .app-promo */
+.app-promo {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50;
+  width: min(320px, calc(100vw - 32px));
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: var(--shadow); padding: 14px 40px 14px 14px;
+  animation: app-promo-in .25s ease;
+}
+@keyframes app-promo-in { from { opacity: 0; transform: translateY(16px); } }
+.app-promo-icon { width: 44px; height: 44px; border-radius: 11px; flex: none; }
+.app-promo-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-promo-text strong { color: var(--green-deep); font-size: 1rem; }
+.app-promo-text span { font-size: .86rem; color: var(--ink-soft); }
+.app-promo-badge { display: block; margin: 6px 0 0 -10px; line-height: 0; }
+.app-promo-badge img { width: 162px; height: auto; }
+.app-promo-close {
+  position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ink-soft); font-size: 1.4rem; line-height: 1; cursor: pointer;
+}
+.app-promo-close:hover, .app-promo-close:focus-visible { background: var(--green-soft); color: var(--green-deep); }
+@media (prefers-reduced-motion: reduce) { .app-promo { animation: none; } }
+
+/* One-off session notice (e.g. a cancelled account deletion) at the top of the page */
+.session-notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+/* Account → Delete my account */
+.danger-zone { border-color: #F1C9C5; background: #FDF3F2; }
+.danger-zone strong { color: var(--error); }
+.btn-danger { background: var(--error); color: #fff; border-color: var(--error); }
+
+/* Notifications page */
+.push-settings .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
+.push-settings .toggle input { width: 22px; height: 22px; accent-color: var(--green); }
+.notification-list { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 10px; }
+.notification-list li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.notification-list li.unread { border-left: 4px solid var(--green); }
+.notification-list p { margin: 4px 0; }
+.notification-list time { font-size: .8rem; color: var(--ink-soft); }

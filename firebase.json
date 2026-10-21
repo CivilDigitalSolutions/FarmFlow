@@ -13,6 +13,7 @@
       { "source": "/signin", "destination": "/index.html" },
       { "source": "/account", "destination": "/index.html" },
       { "source": "/account/setup", "destination": "/index.html" },
+      { "source": "/notifications", "destination": "/index.html" },
       { "source": "/sell", "destination": "/index.html" },
       { "source": "/sell/new", "destination": "/index.html" },
       { "source": "/sell/edit", "destination": "/index.html" },

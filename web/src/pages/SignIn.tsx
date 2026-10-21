@@ -12,9 +12,14 @@ export function safeNext(raw: string | null, fallback = '/'): string {
  * WelcomeScreen + EmailAuthScreen. Same choices as the app — email, Google, Facebook — minus
  * "Continue as guest", because on the web everyone can already browse without an account.
  */
+/** True once the visitor actually signs in on this page (vs. a session that was already here). */
+let signingIn = false;
+
 export function SignIn({ loc }: { loc: Location }) {
   const session = useSession();
   const next = safeNext(loc.search.get('next'));
+  // Each visit to this page starts out "not signing in yet" (the flag outlives in-app navigation).
+  useState(() => { signingIn = false; });
   const [mode, setMode] = useState<'choose' | 'signin' | 'register'>('choose');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,10 +40,13 @@ export function SignIn({ loc }: { loc: Location }) {
   // Signed in (by any route): finish profile setup first if this account has none, then go on.
   useEffect(() => {
     if (session.status !== 'signedIn' || session.profile === undefined) return;
+    // Arriving from Account → Delete my account: that session is being signed out — don't bounce it on.
+    if (loc.search.get('deleted') === '1' && !signingIn) return;
     navigate(session.profile ? next : `/account/setup?next=${encodeURIComponent(next)}`, { replace: true });
   }, [session]);
 
   const social = async (which: 'google' | 'facebook') => {
+    signingIn = true;
     setError(null);
     setBusy(true);
     try {
@@ -62,6 +70,12 @@ export function SignIn({ loc }: { loc: Location }) {
       <div class="auth-card">
         <img class="auth-logo" src="/icons/icon-192.png" alt="" width={72} height={72} />
         <h1>{mode === 'register' ? 'Create account' : mode === 'signin' ? 'Sign in' : 'Welcome'}</h1>
+        {loc.search.get('deleted') === '1' && (
+          <p class="notice-box" role="status">
+            Your account is deactivated and will be permanently deleted in 14 days. Changed your mind?
+            Sign back in before then and everything is restored.
+          </p>
+        )}
         {mode === 'choose' ? (
           <>
             <p class="lede">Sign in or create your account to contact sellers and save listings.</p>
@@ -112,6 +126,7 @@ function EmailForm({ register, onSwitch, onBack }: { register: boolean; onSwitch
   const submit = async (e: Event) => {
     e.preventDefault();
     if (!canSubmit) return;
+    signingIn = true;
     setBusy(true);
     setError(null);
     try {

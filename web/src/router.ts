@@ -9,7 +9,7 @@ export interface Location {
   search: URLSearchParams;
 }
 
-const APP_ROUTE = /^\/(?:$|listing(?:\/.*)?$|seller\/.+$|signin\/?$|account(?:\/setup)?\/?$|sell(?:\/new|\/edit)?\/?$|donate(?:\/thanks)?\/?$)/;
+const APP_ROUTE = /^\/(?:$|listing(?:\/.*)?$|seller\/.+$|signin\/?$|account(?:\/setup)?\/?$|notifications\/?$|sell(?:\/new|\/edit)?\/?$|donate(?:\/thanks)?\/?$)/;
 
 export function isAppRoute(path: string): boolean {
   return APP_ROUTE.test(path);
