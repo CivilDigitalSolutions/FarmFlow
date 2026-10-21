@@ -194,6 +194,17 @@ caption one with a place or call the people in it FarmFlow users.
 | `market-trade` | Sell yam — Step 4 (meet and trade) | https://www.pexels.com/photo/13103276/ |
 | `tractor` | Sell yam — Step 5 (fresh harvest) | https://www.pexels.com/photo/2252618/ |
 
+## App screenshots (`images/app/`)
+
+Real screens of the Android app on the home page ("How it works"), Help (Buying / Selling), the FAQ
+"How do I become a seller?" answer and the scotch bonnet page, shown in a CSS phone frame
+(`.app-shots` / `.app-shot`). They are the Play Store captures from FarmFlow-App
+`store/screenshots/phone/` — the `storeDemo` build (invented sample growers and listings, priced in
+TT$) on the Pixel 7 emulator. Regenerate after fresh captures with
+`python3 scripts/app-screens.py ../FarmFlow-App/store/screenshots/phone`. Every group says it shows
+sample listings; keep them off Jamaica-specific pages (the prices are TT$) and off the Verified
+Seller page (the sample listings carry "Verified" badges and the programme isn't live).
+
 ## Placeholders to replace (find & replace across all files)
 
 | Token | Meaning |
