@@ -31,7 +31,7 @@ export const ADSENSE_CLIENT = 'ca-pub-5319059698255764';
  */
 export const AD_UNITS = {
   /** Listing detail: a "Display ads" unit, responsive. */
-  detail: { slot: '' },
+  detail: { slot: '6010541357' }, // "FarmFlow web – listing display"
   /** Search results: an "In-feed ads" unit styled to sit in the listing grid. */
   search: { slot: '3575949700', layoutKey: '-6t+ed+2i-1n-4w' }, // "FarmFlow web – results in-feed"
 } as const;
