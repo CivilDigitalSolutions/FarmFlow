@@ -182,3 +182,53 @@ button, input, select { font: inherit; color: inherit; }
 .ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
 .ad-controls .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
 .ad-controls .toggle input { width: 22px; height: 22px; accent-color: var(--green); }
+
+/* ---------- selling (pages/Sell.tsx) ---------- */
+.sell { max-width: 760px; }
+.sell-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sell-head h1 { margin: 0; }
+.flash { background: var(--green-soft); color: var(--green-deep); border-radius: 12px; padding: 10px 14px; font-weight: 700; display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.notice-alert { background: #FDECEA; border-color: #F2B8B5; }
+.notice-alert strong { color: var(--error); }
+.contact-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 14px 0; }
+.contact-card p { margin: 2px 0 0; color: var(--ink-soft); overflow-wrap: anywhere; }
+.contact-card.email-form { display: flex; flex-direction: column; align-items: stretch; }
+.contact-missing { border-color: var(--gold); border-left-width: 4px; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 16px 0 12px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; min-height: 44px; padding: 8px 12px; border: 0; border-bottom: 3px solid transparent; background: none; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+.tab-on { color: var(--green-deep); border-bottom-color: var(--green); }
+.my-list { display: flex; flex-direction: column; gap: 12px; }
+.my-card { background: #fff; border-radius: 12px; box-shadow: var(--shadow); padding: 12px; }
+.my-card-top { display: flex; gap: 12px; align-items: center; }
+.my-thumb { width: 64px; height: 64px; flex: none; border-radius: 10px; overflow: hidden; background: var(--green-soft); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+.my-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.my-card-body { min-width: 0; }
+.my-card-body h3 { margin: 0; font-size: 1rem; overflow-wrap: anywhere; }
+.my-card-body h3 a { color: var(--ink); }
+.status { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 800; background: #EEE; color: var(--ink-soft); margin-right: 4px; }
+.status-active { background: var(--green-soft); color: var(--green-deep); }
+.status-sold_out { background: #FDF0D8; color: var(--gold-deep); }
+.status-under_review { background: #FDECEA; color: var(--error); }
+.my-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.btn-danger { color: var(--error); }
+.become-seller { max-width: 520px; }
+.become-seller h1 { text-align: left; font-size: 1.4rem; }
+.check { flex-direction: row !important; align-items: flex-start; gap: 10px !important; font-weight: 600 !important; }
+.check input { width: 22px !important; min-height: 22px !important; height: 22px; flex: none; margin-top: 2px; accent-color: var(--green); }
+.listing-form { max-width: 560px; }
+.listing-form fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.listing-form legend { font-weight: 700; font-size: .9rem; padding: 0; margin-bottom: 4px; }
+.email-form textarea { min-height: 120px; padding: 8px 12px; border-radius: 10px; border: 1px solid #CFC8B6; background: #fff; font: inherit; font-size: 1rem; width: 100%; resize: vertical; }
+.email-form [aria-invalid="true"] { border-color: var(--error); }
+.prefixed { display: flex; align-items: center; gap: 6px; }
+.prefix { font-weight: 800; color: var(--ink-soft); }
+.photo-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.photo-slot { position: relative; aspect-ratio: 1 / 1; border-radius: 12px; background: var(--green-soft); border: 2px dashed transparent; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+.email-form .photo-add, .photo-add { border-color: var(--green); cursor: pointer; font-size: 2rem; color: var(--green-deep); font-weight: 800; }
+.photo-add:focus-within { outline: 3px solid var(--gold); }
+.cover-tag { position: absolute; left: 6px; bottom: 6px; background: var(--green-deep); color: #fff; font-size: .7rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; }
+.photo-state { position: absolute; inset: auto 0 0 0; background: rgba(255,255,255,.88); font-size: .72rem; font-weight: 700; text-align: center; padding: 2px; }
+.photo-error { color: var(--error); }
+.photo-remove { position: absolute; top: 4px; right: 4px; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 1.2rem; cursor: pointer; }

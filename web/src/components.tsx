@@ -19,6 +19,7 @@ export function Header() {
         </a>
         <nav class="topbar-nav">
           <a href="/">Marketplace</a>
+          <a href="/sell">Sell</a>
           <a href="/donate">Donate</a>
           <a href="/about/">About</a>
           {session.status === 'signedIn' ? (
@@ -143,7 +144,7 @@ export function InstallHint() {
   } else if (isAndroid()) {
     body = (
       <p>
-        <strong>On Android?</strong> The FarmFlow app adds notifications and selling.{' '}
+        <strong>On Android?</strong> The FarmFlow app adds notifications and seller analytics.{' '}
         <a href={PLAY_URL} rel="noopener">Get it on Google Play</a>
       </p>
     );

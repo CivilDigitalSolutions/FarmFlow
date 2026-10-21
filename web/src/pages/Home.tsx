@@ -201,8 +201,11 @@ export function Home({ loc }: { loc: Location }) {
 
       <section class="sell-cta">
         <h2>Grow produce? Sell it on FarmFlow</h2>
-        <p>Listing is free. Sellers use the FarmFlow Android app today; selling on the web is coming next.</p>
-        <p><a class="btn btn-outline" href="/about/">How FarmFlow works</a></p>
+        <p>Listing is free. Create an account, add your produce with photos and a price, and buyers contact you directly on WhatsApp or SMS — from this website or the FarmFlow Android app.</p>
+        <p class="row">
+          <a class="btn btn-primary" href="/sell">Start selling</a>
+          <a class="btn btn-outline" href="/about/">How FarmFlow works</a>
+        </p>
       </section>
     </Page>
   );

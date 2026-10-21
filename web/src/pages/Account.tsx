@@ -9,7 +9,7 @@ import type { Meta, PublicListing } from '../types.ts';
 import { safeNext } from './SignIn.tsx';
 
 /** Redirects to sign-in when signed out; returns true while the page should render a spinner. */
-function useRequireSignIn(path: string): boolean {
+export function useRequireSignIn(path: string): boolean {
   const session = useSession();
   useEffect(() => {
     if (session.status === 'signedOut') navigate(`/signin?next=${encodeURIComponent(path)}`, { replace: true });
@@ -18,7 +18,7 @@ function useRequireSignIn(path: string): boolean {
 }
 
 /** The non-blocking verify-email prompt (AppViewModel.showVerifyEmailPrompt), for email accounts. */
-function VerifyEmail() {
+export function VerifyEmail() {
   const session = useSession();
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -94,10 +94,13 @@ export function Account() {
         <strong>{p.isSeller ? 'Your stall' : 'Want to sell?'}</strong>
         <p>
           {p.isSeller
-            ? 'Manage your listings in the FarmFlow Android app. Selling on the web is coming next.'
-            : 'Selling is free. Sellers use the FarmFlow Android app today; selling on the web is coming next.'}
+            ? 'List produce, update your contact number and manage your listings — here or in the FarmFlow Android app.'
+            : 'Selling is free. List your produce right here on the website, or in the FarmFlow Android app.'}
         </p>
-        <p><a class="btn btn-small btn-outline" href={PLAY_URL} rel="noopener">FarmFlow on Google Play</a></p>
+        <p class="row">
+          <a class="btn btn-small btn-primary" href="/sell">{p.isSeller ? 'My listings' : 'Start selling'}</a>
+          <a class="btn btn-small btn-outline" href={PLAY_URL} rel="noopener">FarmFlow on Google Play</a>
+        </p>
       </section>
 
       <AdControls uid={session.uid} />

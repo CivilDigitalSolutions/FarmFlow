@@ -6,6 +6,7 @@ import { Gone } from './pages/Gone.tsx';
 import { Home } from './pages/Home.tsx';
 import { ListingPage } from './pages/Listing.tsx';
 import { SellerPage } from './pages/Seller.tsx';
+import { ListingEditor, SellHub } from './pages/Sell.tsx';
 import { SignIn } from './pages/SignIn.tsx';
 import { interceptLinks, useLocation, type Location } from './router.ts';
 import { initSession } from './session.ts';
@@ -35,6 +36,8 @@ function Route({ loc }: { loc: Location }) {
   if (/^\/signin\/?$/.test(p)) return <SignIn loc={loc} />;
   if (/^\/account\/setup\/?$/.test(p)) return <AccountSetup loc={loc} />;
   if (/^\/account\/?$/.test(p)) return <Account />;
+  if (/^\/sell\/?$/.test(p)) return <SellHub loc={loc} />;
+  if (/^\/sell\/(new|edit)\/?$/.test(p)) return <ListingEditor key={p + loc.search.toString()} loc={loc} />;
   if (/^\/donate\/thanks\/?$/.test(p)) return <DonateThanks loc={loc} />;
   if (/^\/donate\/?$/.test(p)) return <Donate />;
   return <Gone kind="page" />;
