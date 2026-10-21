@@ -33,7 +33,7 @@ export const AD_UNITS = {
   /** Listing detail: a "Display ads" unit, responsive. */
   detail: { slot: '' },
   /** Search results: an "In-feed ads" unit styled to sit in the listing grid. */
-  search: { slot: '', layoutKey: '' },
+  search: { slot: '3575949700', layoutKey: '-6t+ed+2i-1n-4w' }, // "FarmFlow web – results in-feed"
 } as const;
 
 const PRODUCTION_HOST = 'www.farmflowcaribbean.com';
