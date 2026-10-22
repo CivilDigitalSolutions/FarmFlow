@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { NotFoundError, fetchListing } from '../api.ts';
 import { AdSlot, useAdPlacements } from '../ads.tsx';
 import { Badge, Page, Spinner, place } from '../components.tsx';
@@ -6,7 +6,7 @@ import { contactDigits, smsUrl, whatsAppUrl } from '../format.ts';
 import type { Location } from '../router.ts';
 import { dataModule, useSession } from '../session.ts';
 import type { ListingSeller } from '../data.ts';
-import type { ListingData } from '../types.ts';
+import type { ListingData, PublicListing } from '../types.ts';
 import { Gone } from './Gone.tsx';
 
 /** Current links: /listing/{slug}?id={id}. Links shared before slugs: /listing/{id}. */
@@ -18,6 +18,40 @@ export function listingId(loc: Location): string {
 }
 
 const viewedThisSession = new Set<string>();
+
+/**
+ * The listing's photos, one at a time: translucent ‹ › buttons step through them and a "2 / 3" counter
+ * shows where you are. Still a scroll-snap strip underneath, so a phone swipes as before.
+ */
+function Gallery({ listing: l }: { listing: PublicListing }) {
+  const strip = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const count = l.images.length;
+  const go = (to: number) => {
+    const el = strip.current;
+    if (!el) return;
+    const i = Math.max(0, Math.min(count - 1, to));
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' });
+  };
+  const onScroll = () => {
+    const el = strip.current;
+    if (el && el.clientWidth) setIndex(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  return (
+    <div class="gallery-wrap">
+      <div class="gallery" ref={strip} onScroll={onScroll}>
+        {count ? l.images.map((img, i) => (
+          <img key={img.imageUrl} src={img.imageUrl} alt={i ? `${l.title} photo ${i + 1}` : l.title} loading={i ? 'lazy' : undefined} decoding="async" />
+        )) : <span class="gallery-emoji" aria-hidden="true">{l.emoji}</span>}
+      </div>
+      {count > 1 && <>
+        {index > 0 && <button type="button" class="gallery-nav prev" aria-label="Previous photo" onClick={() => go(index - 1)}>‹</button>}
+        {index < count - 1 && <button type="button" class="gallery-nav next" aria-label="Next photo" onClick={() => go(index + 1)}>›</button>}
+        <span class="gallery-count" aria-live="polite">{index + 1} / {count}</span>
+      </>}
+    </div>
+  );
+}
 
 /**
  * ListingDetailScreen. Signed out, it is exactly Android's guest view: the produce, price, quantity
@@ -60,11 +94,7 @@ export function ListingPage({ loc, initial }: { loc: Location; initial: ListingD
         {l.category && <> › <a href={`/?category=${encodeURIComponent(l.category)}`}>{l.category}</a></>}
       </nav>
       <div class="listing-grid">
-        <div class="gallery">
-          {l.images.length ? l.images.map((img, i) => (
-            <img key={img.imageUrl} src={img.imageUrl} alt={i ? `${l.title} photo ${i + 1}` : l.title} loading={i ? 'lazy' : undefined} decoding="async" />
-          )) : <span class="gallery-emoji" aria-hidden="true">{l.emoji}</span>}
-        </div>
+        <Gallery listing={l} />
         <section class="listing-info">
           <h1>{l.title}</h1>
           <p class="listing-price">{l.priceLabel}</p>
