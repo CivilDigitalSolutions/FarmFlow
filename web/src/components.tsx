@@ -2,6 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { AdPrivacyLink } from './ads.tsx';
 import { useEffect, useState } from 'preact/hooks';
 import { PLAY_URL, isAndroid, isIos, isStandalone, store } from './format.ts';
+import { openedFromApp } from './promo.ts';
 import { formatDistance, priceEstimateLabel } from './search.ts';
 import { clearNotice, refreshSession, useSession } from './session.ts';
 import type { PublicListing, Verification } from './types.ts';
@@ -138,7 +139,7 @@ const APP_PROMO_SNOOZE_MS = 30 * 24 * 60 * 60 * 1000;
 export function AppPromo() {
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (isIos() || isStandalone()) return;
+    if (isIos() || isStandalone() || openedFromApp()) return;
     const at = Number(store.get(APP_PROMO_DISMISSED));
     if (at && Date.now() - at < APP_PROMO_SNOOZE_MS) return;
     const t = setTimeout(() => setOpen(true), 2500);

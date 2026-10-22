@@ -13,6 +13,15 @@
   var iOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var installed = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
   if (iOS || installed || navigator.standalone) return;
+  // Opened from inside the FarmFlow app (its Privacy / Terms / Help links open a Chrome Custom Tab,
+  // which reports the app as the referrer): they already have the app. Remembered for the tab.
+  var IN_APP = 'ff-opened-from-app';
+  try {
+    if (/^android-app:\/\/com\.civildigital\.farmflow/.test(document.referrer)) sessionStorage.setItem(IN_APP, '1');
+    if (sessionStorage.getItem(IN_APP)) return;
+  } catch (e) { /* storage blocked: fall back to the referrer alone */
+    if (/^android-app:\/\/com\.civildigital\.farmflow/.test(document.referrer)) return;
+  }
   try {
     var at = Number(localStorage.getItem(KEY));
     if (at && Date.now() - at < SNOOZE_MS) return;

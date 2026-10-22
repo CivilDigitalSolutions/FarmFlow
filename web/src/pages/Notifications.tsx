@@ -47,7 +47,7 @@ export function Notifications() {
             <li key={n.id} class={n.read ? '' : 'unread'}>
               <strong>{n.title}</strong>
               {n.message.split('\n').map((line, i) => <p key={i}>{line}</p>)}
-              {n.createdAt > 0 && <time dateTime={new Date(n.createdAt).toISOString()}>{new Date(n.createdAt).toLocaleString()}</time>}
+              {n.createdAt > 0 && <time dateTime={new Date(n.createdAt).toISOString()}>{new Date(n.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</time>}
             </li>
           ))}
         </ul>
