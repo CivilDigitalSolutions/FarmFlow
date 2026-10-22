@@ -6,7 +6,9 @@
  * just browses never downloads the Firebase SDK — browsing runs on the public /api/*.
  *
  * Values match /assets/firebase-config.js (the email action handler's copy). The apiKey is a public
- * client identifier, not a secret.
+ * client identifier, not a secret. It must be the WEB app's key ("FarmFlow (auto created by
+ * Firebase)"): the project's "Browser key" is restricted to the Android app, so with it every browser
+ * sign-in and password reset was refused (fixed 2026-10-22).
  */
 import { initializeApp } from 'firebase/app';
 import { browserLocalPersistence, connectAuthEmulator, indexedDBLocalPersistence, initializeAuth } from 'firebase/auth';
@@ -28,7 +30,7 @@ export const USE_EMULATORS = import.meta.env.VITE_FIREBASE_EMULATORS === '1';
 const HOSTING_HOSTS = new Set(['www.farmflowcaribbean.com', 'farmflow-51796.web.app', 'farmflow-51796.firebaseapp.com']);
 
 export const app = initializeApp({
-  apiKey: 'AIzaSyAiaCVbgdB_OlQNWCfUGy9BaDQ6FplImv8',
+  apiKey: 'AIzaSyBX_d9xl3zvzolKMF2XuZ_cK0VjYhkHHJw',
   authDomain: HOSTING_HOSTS.has(location.hostname) ? location.hostname : DEFAULT_AUTH_DOMAIN,
   projectId: USE_EMULATORS ? 'demo-farmflow' : 'farmflow-51796',
   storageBucket: 'farmflow-51796.firebasestorage.app',

@@ -8,7 +8,7 @@
    by Firebase Auth + Security Rules.
    ============================================================================ */
 window.FARMFLOW_FIREBASE_CONFIG = {
-  apiKey: "AIzaSyAiaCVbgdB_OlQNWCfUGy9BaDQ6FplImv8",
+  apiKey: "AIzaSyBX_d9xl3zvzolKMF2XuZ_cK0VjYhkHHJw",
   authDomain: "farmflow-51796.firebaseapp.com",
   projectId: "farmflow-51796",
   storageBucket: "farmflow-51796.firebasestorage.app",
