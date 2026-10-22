@@ -200,7 +200,7 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 /* Nothing to show (no fill, or an ad blocker): take no space, as the app's ad slots collapse. */
 .ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
 .ad-controls .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
-.ad-controls .toggle input { width: 22px; height: 22px; accent-color: var(--green); }
+.ad-controls .toggle input { width: 24px; height: 24px; accent-color: var(--green); }
 
 /* ---------- selling (pages/Sell.tsx) ---------- */
 .sell { max-width: 760px; }
@@ -234,7 +234,7 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .become-seller { max-width: 520px; }
 .become-seller h1 { text-align: left; font-size: 1.4rem; }
 .check { flex-direction: row !important; align-items: flex-start; gap: 10px !important; font-weight: 600 !important; }
-.check input { width: 22px !important; min-height: 22px !important; height: 22px; flex: none; margin-top: 2px; accent-color: var(--green); }
+.check input { width: 24px !important; min-height: 24px !important; height: 24px; flex: none; margin-top: 2px; accent-color: var(--green); }
 .listing-form { max-width: 560px; }
 .listing-form fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .listing-form legend { font-weight: 700; font-size: .9rem; padding: 0; margin-bottom: 4px; }
@@ -285,7 +285,7 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 
 /* Notifications page */
 .push-settings .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
-.push-settings .toggle input { width: 22px; height: 22px; accent-color: var(--green); }
+.push-settings .toggle input { width: 24px; height: 24px; accent-color: var(--green); }
 .notification-list { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 10px; }
 .notification-list li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
 .notification-list li.unread { border-left: 4px solid var(--green); }

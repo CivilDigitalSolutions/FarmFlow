@@ -71,6 +71,7 @@ img,svg{max-width:100%}
 .topnav-links a{
   color:var(--ink-soft);text-decoration:none;font-size:.86rem;font-weight:600;
   padding:4px 2px;border-bottom:2px solid transparent;
+  display:inline-flex;align-items:center;min-height:28px; /* 24px+ tap target (WCAG 2.5.8) */
 }
 .topnav-links a:hover,.topnav-links a:focus-visible{color:var(--green-deep);border-bottom-color:var(--gold)}
 
