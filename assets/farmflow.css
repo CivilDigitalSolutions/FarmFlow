@@ -388,7 +388,7 @@ footer.site{
 .foot{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between}
 .foot .brand{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;color:#fff;font-size:1.1rem}
 .foot nav{display:flex;flex-wrap:wrap;gap:8px 20px}
-.foot nav a{color:#C9D8C0;text-decoration:none}
+.foot nav a{color:#C9D8C0;text-decoration:none;padding:2px 0}
 .foot nav a:hover{color:#fff;text-decoration:underline}
 .foot .legal{width:100%;border-top:1px solid rgba(255,255,255,.14);padding-top:18px;color:#9DB292}
 
