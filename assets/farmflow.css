@@ -136,7 +136,7 @@ img,svg{max-width:100%}
 }
 .subhero > *{position:relative}
 .subhero .crumb{font-size:.82rem;margin-bottom:14px}
-.subhero .crumb a{color:#D7E5CE;text-decoration:none}
+.subhero .crumb a{color:#D7E5CE;text-decoration:none;display:inline-block;padding:4px 0}
 .subhero .crumb a:hover{color:#fff;text-decoration:underline}
 .subhero h1{color:#fff;font-size:clamp(1.7rem,5vw,2.5rem);font-weight:800}
 .subhero p{color:#E4EEDD;margin-top:8px;max-width:640px}

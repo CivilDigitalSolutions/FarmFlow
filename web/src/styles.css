@@ -31,6 +31,9 @@ body {
    footer takes up the slack above it. */
 #app { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
 #app > .foot { margin-top: auto; }
+/* A flex item with auto side margins sizes to its content: the chip row's full width made Home 1000px
+   wide on a phone. Fill the column instead (max-width still caps it on desktop). */
+#app > .page { width: 100%; min-width: 0; }
 h1, h2, h3 { font-family: "Bricolage Grotesque", "Nunito Sans", sans-serif; color: var(--green-deep); line-height: 1.15; }
 h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin: .2em 0 .35em; }
 h2 { font-size: 1.25rem; margin: 1.6em 0 .6em; }
@@ -86,7 +89,7 @@ button, input, select { font: inherit; color: inherit; }
 .filters label { display: flex; flex-direction: column; gap: 2px; font-size: .78rem; font-weight: 700; color: var(--ink-soft); }
 .filters select { min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--line); background: #fff; font-size: .95rem; max-width: 46vw; }
 .filters .toggle { flex-direction: row; align-items: center; gap: 6px; min-height: 40px; font-size: .9rem; color: var(--ink); }
-.filters .toggle input { width: 24px; height: 24px; accent-color: var(--green); }
+input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } /* 24px tap target (WCAG 2.5.8) */
 .count, .hint { color: var(--ink-soft); font-size: .9rem; margin: 8px 0; }
 .empty { text-align: center; color: var(--ink-soft); padding: 28px 8px; }
 .loading { display: flex; gap: 10px; align-items: center; justify-content: center; color: var(--ink-soft); padding: 24px 0; }
