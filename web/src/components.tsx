@@ -45,6 +45,7 @@ export function Footer() {
           <AdPrivacyLink />
         </p>
         <p><a href={PLAY_URL} rel="noopener">Get FarmFlow on Google Play</a></p>
+        <p class="foot-legal">The FarmFlow website and app are built by Civil Digital · © 2026 Civil Digital. All rights reserved.</p>
       </div>
     </footer>
   );
