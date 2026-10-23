@@ -244,7 +244,7 @@ function BecomeSeller({ session, profile }: { session: SignedIn; profile: Seller
 }
 
 /** ContactPhoneDialog, inline. */
-function ContactNumber({ uid, profile, onSaved }: { uid: string; profile: SellerProfile; onSaved: (p: SellerProfile) => void }) {
+export function ContactNumber({ uid, profile, onSaved }: { uid: string; profile: SellerProfile; onSaved: (p: SellerProfile) => void }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(profile.contactPhone);
   const [busy, setBusy] = useState(false);

@@ -25,6 +25,8 @@ export interface ImageSpec {
 /** ImageSpecs.LISTING / ImageSpecs.THUMBNAIL. */
 export const LISTING_SPEC: ImageSpec = { maxEdgePx: 1600, targetMaxBytes: 600 * 1024, startQuality: 88, minQuality: 58 };
 export const THUMBNAIL_SPEC: ImageSpec = { maxEdgePx: 300, targetMaxBytes: 50 * 1024, startQuality: 80, minQuality: 45 };
+/** ImageSpecs.PROFILE. */
+export const PROFILE_SPEC: ImageSpec = { maxEdgePx: 1024, targetMaxBytes: 500 * 1024, startQuality: 88, minQuality: 60 };
 
 const QUALITY_STEP = 8;
 const DIMENSION_SHRINK = 0.85;
@@ -114,6 +116,23 @@ async function encode(source: Source, spec: ImageSpec): Promise<OptimisedImage> 
   }
   canvas.width = canvas.height = 0; // release the bitmap memory promptly on phones
   return best!;
+}
+
+/** ImageOptimizer.optimise: one output (the profile photo). Same checks and messages as below. */
+export async function optimise(file: File, spec: ImageSpec): Promise<OptimisedImage> {
+  if (!file.type.startsWith('image/') && file.type !== '') throw new Error('That file isn’t a photo.');
+  if (file.size > MAX_SOURCE_BYTES) throw new Error('That photo is too large to use.');
+  let source: Source;
+  try {
+    source = await decode(file);
+  } catch {
+    throw new Error('That photo couldn’t be read. Try a JPEG or PNG.');
+  }
+  try {
+    return await encode(source, spec);
+  } finally {
+    if ('close' in source) source.close();
+  }
 }
 
 /**

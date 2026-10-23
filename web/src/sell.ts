@@ -188,6 +188,60 @@ export async function saveContactPhone(uid: string, p: SellerProfile, contactPho
   await upsertSellerProfile(uid, p, contactPhone);
 }
 
+// ---- Profile (the app's Profile screen) ----
+// Every write merges: Android's saveProfile replaces the whole users/{uid} doc, which the web must
+// not copy — it would wipe fields this page never loads. A seller's public stall follows each change.
+
+/** updateProfileIdentity: display name, island and town (parish is left as it was, as in the app). */
+export async function saveIdentity(uid: string, p: SellerProfile): Promise<void> {
+  await setDoc(doc(db, 'users', uid), {
+    displayName: p.displayName, parish: p.parish, island: p.island, townId: p.townId, updatedAt: serverTimestamp(),
+  }, { merge: true });
+  if (p.isSeller) await upsertSellerProfile(uid, p, p.contactPhone);
+}
+
+/** updateFarmDescription — the stall's "about" text. */
+export async function saveFarmDescription(uid: string, p: SellerProfile): Promise<void> {
+  await setDoc(doc(db, 'users', uid), { farmDescription: p.farmDescription, updatedAt: serverTimestamp() }, { merge: true });
+  if (p.isSeller) await upsertSellerProfile(uid, p, p.contactPhone);
+}
+
+/**
+ * uploadProfilePhoto: profile_photos/{uid}.jpg (the app's path, so the rules, the orphan sweeper and
+ * account deletion all cover it), then photoUrl on the profile and the stall. Resolves to the new p.
+ * The path is reused on every change, so unlike listing photos it gets a short cache — an
+ * "immutable" year would keep showing the old face.
+ */
+export async function uploadProfilePhoto(uid: string, p: SellerProfile, image: OptimisedImage): Promise<SellerProfile> {
+  const r = ref(storage, `profile_photos/${uid}.jpg`);
+  await uploadBytes(r, image.blob, { contentType: 'image/jpeg', cacheControl: 'public, max-age=3600' });
+  const photoUrl = await getDownloadURL(r);
+  await setDoc(doc(db, 'users', uid), { photoUrl, photoUpdatedAt: Date.now(), updatedAt: serverTimestamp() }, { merge: true });
+  const next = { ...p, photoUrl };
+  if (p.isSeller) await upsertSellerProfile(uid, next, p.contactPhone);
+  return next;
+}
+
+export interface EmailPrefs {
+  recoveryEmail: string;
+  marketingConsent: boolean;
+}
+
+export async function loadEmailPrefs(uid: string): Promise<EmailPrefs> {
+  const d = (await getDoc(doc(db, 'users', uid))).data() ?? {};
+  return { recoveryEmail: str(d.recoveryEmail), marketingConsent: d.marketingConsent === true };
+}
+
+/** setMarketingConsent — the consent record (time and address) the owner's mailing list reads. */
+export async function setMarketingConsent(uid: string, on: boolean, email: string): Promise<void> {
+  await setDoc(doc(db, 'users', uid), {
+    marketingConsent: on, marketingConsentAt: serverTimestamp(), marketingEmail: on ? email : '', updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+/** SellerProfile.canUploadPhoto: profile photos are for verified sellers, as in the app. */
+export const canUploadPhoto = (p: SellerProfile) => p.verification === 'VERIFIED' || p.verification === 'COMMERCIAL';
+
 function toMyListing(id: string, d: DocumentData): MyListing {
   const images: ListingImage[] = Array.isArray(d.images)
     ? d.images.filter((i: unknown) => typeof (i as ListingImage)?.imageUrl === 'string' && (i as ListingImage).imageUrl)

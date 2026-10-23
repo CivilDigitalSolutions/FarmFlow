@@ -212,6 +212,16 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .contact-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 14px 0; }
 .contact-card p { margin: 2px 0 0; color: var(--ink-soft); overflow-wrap: anywhere; }
 .contact-card.email-form { display: flex; flex-direction: column; align-items: stretch; }
+.contact-card textarea { width: 100%; padding: 8px 12px; border-radius: 10px; border: 1px solid #CFC8B6; background: #fff; font-size: 1rem; }
+.profile-photo { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
+.profile-photo img, .avatar-initial { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; }
+.avatar-initial { display: inline-flex; align-items: center; justify-content: center; background: var(--green-deep); color: #fff; font-size: 1.8rem; font-weight: 800; }
+.profile-photo label.btn { cursor: pointer; }
+.profile-facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 10px 0; color: var(--ink-soft); }
+.profile-facts dt { font-weight: 700; color: var(--ink); }
+.profile-facts dd { margin: 0; overflow-wrap: anywhere; }
+.profile .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .contact-missing { border-color: var(--gold); border-left-width: 4px; }
 .tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 16px 0 12px; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }

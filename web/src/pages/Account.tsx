@@ -6,6 +6,7 @@ import { navigate, type Location } from '../router.ts';
 import { authModule, dataModule, refreshSession, useSession } from '../session.ts';
 import type { AdSwitch } from '../data.ts';
 import type { Meta, PublicListing } from '../types.ts';
+import { ProfileEditor } from './Profile.tsx';
 import { safeNext } from './SignIn.tsx';
 
 /** Redirects to sign-in when signed out; returns true while the page should render a spinner. */
@@ -82,6 +83,8 @@ export function Account() {
       <h1>Hi, {p.displayName}</h1>
       <p class="lede">{session.email}{p.island ? ` · ${[town?.name, p.island].filter(Boolean).join(', ')}` : ''}</p>
       <VerifyEmail />
+
+      <ProfileEditor uid={session.uid} email={session.email} />
 
       <h2>Saved listings</h2>
       {saved == null ? <Spinner /> : saved.length ? (
