@@ -173,14 +173,15 @@ export async function resetPassword(email: string): Promise<string> {
 }
 
 /**
- * Redirect sign-in on phones, tablets and installed (home-screen) apps — pop-ups are unreliable
- * there, especially on iPhone — and a pop-up on desktop, falling back to redirect if it's blocked.
+ * Redirect sign-in only in the installed (home-screen) app, where a pop-up opens outside it. Everywhere
+ * else — phones included — a pop-up, falling back to redirect if it's blocked. A phone redirect broke
+ * Facebook (owner, 23 Oct, Brave on Android): Facebook's page can hand off to the Facebook app, which
+ * comes back in a new tab without the sign-in state ("Unable to process request due to missing
+ * initial state"); a pop-up reports back to the page that opened it.
  */
 function preferRedirect(): boolean {
-  const standalone = matchMedia('(display-mode: standalone)').matches ||
+  return matchMedia('(display-mode: standalone)').matches ||
     (navigator as Navigator & { standalone?: boolean }).standalone === true;
-  return standalone || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS reports as a Mac
 }
 
 const PENDING_REDIRECT_KEY = 'ff.pendingRedirect';
