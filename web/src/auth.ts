@@ -27,6 +27,7 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithCredential,
   signInWithPopup,
   signInWithRedirect,
   signOut as fbSignOut,
@@ -209,7 +210,73 @@ export function signInWithGoogle(): Promise<User | null> {
   return withProvider(provider, 'Google sign-in failed.');
 }
 
-export function signInWithFacebook(): Promise<User | null> {
+/** The FarmFlow Facebook app (Android: @string/facebook_app_id). */
+const FACEBOOK_APP_ID = '1027819916355787';
+const FB_LOGIN_KEY = 'ff.facebookLogin';
+const FB_LOGIN_MAX_AGE_MS = 15 * 60 * 1000;
+
+/** A phone or tablet browser (not the installed app, which keeps Firebase's redirect). */
+function mobileBrowser(): boolean {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS reports as a Mac
+}
+
+/**
+ * Facebook on phones, without Firebase's handler. Firebase keeps a redirect or pop-up sign-in's state
+ * in the tab that started it, but on Android Facebook's page can hand off to the Facebook app, which
+ * returns in a NEW tab — "Unable to process request due to missing initial state" (owner, 23 Oct,
+ * Brave; pop-up and redirect alike). Here the state lives in localStorage, which every tab shares:
+ * Facebook returns an access token to /signin, and Firebase signs in with it — exactly how the
+ * Android app signs in with Facebook (FacebookAuthProvider.credential).
+ */
+function startFacebookTokenLogin(next: string): never {
+  const state = crypto.randomUUID();
+  try { localStorage.setItem(FB_LOGIN_KEY, JSON.stringify({ state, next, at: Date.now() })); } catch { /* storage blocked: completion will say so */ }
+  const url = new URL('https://www.facebook.com/dialog/oauth');
+  url.searchParams.set('client_id', FACEBOOK_APP_ID);
+  url.searchParams.set('redirect_uri', `${location.origin}/signin`);
+  url.searchParams.set('response_type', 'token');
+  url.searchParams.set('scope', 'email,public_profile');
+  url.searchParams.set('state', state);
+  location.assign(url.toString());
+  throw new SignInCancelled(); // never reached in practice: the page is leaving
+}
+
+/**
+ * Facebook's return to /signin: #access_token=… on success, ?error=…&state=… when the visitor cancels.
+ * Returns the part to read, or null when this page load isn't one.
+ */
+export function facebookTokenReturn(hash: string, search: string): string | null {
+  if (/(^|[#&])(access_token|error)=/.test(hash)) return hash;
+  if (/[?&]error=/.test(search) && /[?&]state=/.test(search)) return search;
+  return null;
+}
+
+/**
+ * Completes startFacebookTokenLogin in whichever tab Facebook returned to. Resolves to the page to go
+ * on to; throws SignInCancelled if the visitor cancelled, or a friendly message on failure.
+ */
+export async function completeFacebookTokenLogin(returned: string): Promise<string> {
+  const params = new URLSearchParams(returned.replace(/^[#?]/, ''));
+  history.replaceState(null, '', location.pathname); // drop the token / error from the address bar
+  let saved: { state?: string; next?: string; at?: number } = {};
+  try { saved = JSON.parse(localStorage.getItem(FB_LOGIN_KEY) ?? '{}'); localStorage.removeItem(FB_LOGIN_KEY); } catch { /* ignore */ }
+  if (params.get('error')) throw new SignInCancelled();
+  const token = params.get('access_token');
+  const fresh = typeof saved.at === 'number' && Date.now() - saved.at < FB_LOGIN_MAX_AGE_MS;
+  if (!token || !saved.state || params.get('state') !== saved.state || !fresh) {
+    throw new Error('That Facebook sign-in didn’t complete. Please try again.');
+  }
+  try {
+    await signInWithCredential(auth, FacebookAuthProvider.credential(token));
+  } catch (e) {
+    throw new Error(friendlyError(e, 'Facebook sign-in failed.'));
+  }
+  return saved.next && saved.next.startsWith('/') && !saved.next.startsWith('//') ? saved.next : '/';
+}
+
+export function signInWithFacebook(next = '/'): Promise<User | null> {
+  if (mobileBrowser() && !preferRedirect()) startFacebookTokenLogin(next);
   const provider = new FacebookAuthProvider();
   provider.addScope('email');
   provider.addScope('public_profile');

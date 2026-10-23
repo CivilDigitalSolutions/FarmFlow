@@ -29,6 +29,17 @@ export function SignIn({ loc }: { loc: Location }) {
   // Back from a Google / Facebook redirect: surface a failure (success arrives via the session).
   useEffect(() => {
     authModule().then((m) => {
+      const facebookReturn = m.facebookTokenReturn(location.hash, location.search);
+      if (facebookReturn) {
+        // Back from the phone Facebook flow — possibly in a new tab (see auth.startFacebookTokenLogin).
+        signingIn = true;
+        setBusy(true);
+        m.completeFacebookTokenLogin(facebookReturn)
+          .then((to) => navigate(`/signin?next=${encodeURIComponent(to)}`, { replace: true }))
+          .catch((e: Error) => { if (!(e instanceof m.SignInCancelled)) setError(e.message); })
+          .finally(() => setBusy(false));
+        return;
+      }
       if (!m.hasPendingRedirect()) return;
       setBusy(true);
       m.completeRedirect()
@@ -51,7 +62,7 @@ export function SignIn({ loc }: { loc: Location }) {
     setBusy(true);
     try {
       const m = await authModule();
-      await (which === 'google' ? m.signInWithGoogle() : m.signInWithFacebook());
+      await (which === 'google' ? m.signInWithGoogle() : m.signInWithFacebook(next));
     } catch (e) {
       const m = await authModule();
       if (!(e instanceof m.SignInCancelled)) setError((e as Error).message);
