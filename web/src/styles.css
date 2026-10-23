@@ -80,7 +80,7 @@ button, input, select { font: inherit; color: inherit; }
 .hero { background: var(--green); color: #fff; border-radius: var(--radius); padding: 22px 18px; margin: 4px 0 14px; }
 .hero h1 { color: #fff; margin-top: 0; }
 .hero p { margin: 0 0 14px; color: #E7EFE2; }
-.searchbar input { width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 999px; border: 0; font-size: 1rem; background: #fff; }
+.searchbar input { width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 999px; border: 0; font-size: 1rem; background: #fff; color: var(--ink); } /* the hero is white text; inputs inherit it */
 .chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 10px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
 .chip { flex: none; min-height: 38px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-weight: 700; cursor: pointer; white-space: nowrap; }
