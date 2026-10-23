@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { NotFoundError, fetchListing } from '../api.ts';
+import { NotFoundError, cachedListing, fetchListing } from '../api.ts';
 import { AdSlot, useAdPlacements } from '../ads.tsx';
 import { Badge, Page, Spinner, place } from '../components.tsx';
 import { contactDigits, smsUrl, whatsAppUrl } from '../format.ts';
@@ -41,7 +41,9 @@ function Gallery({ listing: l }: { listing: PublicListing }) {
     <div class="gallery-wrap">
       <div class="gallery" ref={strip} onScroll={onScroll}>
         {count ? l.images.map((img, i) => (
-          <img key={img.imageUrl} src={img.imageUrl} alt={i ? `${l.title} photo ${i + 1}` : l.title} loading={i ? 'lazy' : undefined} decoding="async" />
+          <img key={img.imageUrl} src={img.imageUrl} alt={i ? `${l.title} photo ${i + 1}` : l.title} loading={i ? 'lazy' : undefined} decoding="async"
+            // The marketplace already downloaded the thumbnail: show it while the full photo loads.
+            style={img.thumbnailUrl ? { backgroundImage: `url("${img.thumbnailUrl}")`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined} />
         )) : <span class="gallery-emoji" aria-hidden="true">{l.emoji}</span>}
       </div>
       {count > 1 && <>
@@ -61,20 +63,28 @@ function Gallery({ listing: l }: { listing: PublicListing }) {
  */
 export function ListingPage({ loc, initial }: { loc: Location; initial: ListingData | null }) {
   const id = listingId(loc);
-  const [data, setData] = useState<ListingData | null>(initial?.listing.id === id ? initial : null);
+  const fromServer = initial?.listing.id === id;
+  const [data, setData] = useState<ListingData | null>(fromServer ? initial : cachedListing(id));
   const [gone, setGone] = useState(false);
   const [error, setError] = useState(false);
   const ads = useAdPlacements();
 
   useEffect(() => {
-    if (data?.listing.id === id) return;
-    setData(null);
+    if (fromServer && data?.listing.id === id) return;
+    const cached = cachedListing(id);
+    setData(cached); // shown at once when opened from the marketplace; refreshed below
     setGone(false);
     setError(false);
     if (!id) { setGone(true); return; }
+    let live = true;
     fetchListing(id)
-      .then(setData)
-      .catch((e) => (e instanceof NotFoundError ? setGone(true) : setError(true)));
+      .then((d) => { if (live) setData(d); })
+      .catch((e) => {
+        if (!live) return;
+        if (e instanceof NotFoundError) setGone(true);
+        else if (!cached) setError(true); // keep showing the cached copy if only the refresh failed
+      });
+    return () => { live = false; };
   }, [id]);
 
   useEffect(() => {
