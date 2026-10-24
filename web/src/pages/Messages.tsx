@@ -145,7 +145,6 @@ function Chat({ uid, convId }: { uid: string; convId: string }) {
     if (!m) return;
     const offs = [
       m.watchConversation(convId, setConv),
-      m.watchMessages(convId, setMessages),
       m.watchStates(uid, (s) => { if (readAtOnOpen.current == null) readAtOnOpen.current = s[convId]?.readAt ?? 0; setStates(s); }),
       m.watchBlocked(uid, setBlocked),
       m.watchConversations(uid, setAllChats),
@@ -153,6 +152,13 @@ function Chat({ uid, convId }: { uid: string; convId: string }) {
     m.listingOwner(listingId).then(setOwner);
     return () => offs.forEach((off) => off());
   }, [m, convId]);
+  // Messages only once the chat exists: before the buyer's first message the read is refused, and
+  // Firestore ends a listener for good after an error.
+  const chatExists = conv != null;
+  useEffect(() => {
+    if (!m || !chatExists) return;
+    return m.watchMessages(convId, setMessages);
+  }, [m, convId, chatExists]);
   useEffect(() => { fetchListing(listingId).then((d) => setListing(d.listing)).catch(() => setListing(null)); }, [listingId]);
 
   // Mark read while the chat is open and visible; scroll to the newest message.
