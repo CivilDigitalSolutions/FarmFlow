@@ -4,14 +4,34 @@ import { useEffect, useState } from 'preact/hooks';
 import { PLAY_URL, isAndroid, isIos, isStandalone, store } from './format.ts';
 import { openedFromApp } from './promo.ts';
 import { formatDistance, priceEstimateLabel } from './search.ts';
-import { clearNotice, refreshSession, useSession } from './session.ts';
+import { clearNotice, dataModule, refreshSession, useSession } from './session.ts';
 import type { PublicListing, Verification } from './types.ts';
 
 // Class names match functions/web/render.js (the server-rendered pages) so the app takes over a
 // server-rendered page without the layout shifting.
 
+/** Chats waiting for the signed-in user, re-checked every minute while the page is visible. */
+function useUnreadChats(uid: string | null): number {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!uid) { setN(0); return; }
+    let live = true;
+    const check = () => {
+      if (document.visibilityState !== 'visible') return;
+      dataModule().then((d) => d.unreadChatCount(uid)).then((c) => { if (live) setN(c); }).catch(() => undefined);
+    };
+    check();
+    const timer = setInterval(check, 60_000);
+    document.addEventListener('visibilitychange', check);
+    window.addEventListener('popstate', check);
+    return () => { live = false; clearInterval(timer); document.removeEventListener('visibilitychange', check); window.removeEventListener('popstate', check); };
+  }, [uid]);
+  return n;
+}
+
 export function Header() {
   const session = useSession();
+  const unread = useUnreadChats(session.status === 'signedIn' ? session.uid : null);
   return (
     <header class="topbar">
       <div class="topbar-in">
@@ -23,6 +43,11 @@ export function Header() {
           <a href="/sell">Sell</a>
           <a href="/donate">Donate</a>
           <a href="/about/">About</a>
+          {session.status === 'signedIn' && (
+            <a class="nav-messages" href="/messages" aria-label={unread ? `Messages, ${unread} unread` : 'Messages'}>
+              Messages{unread > 0 && <span class="nav-badge" aria-hidden="true">{unread > 9 ? '9+' : unread}</span>}
+            </a>
+          )}
           {session.status === 'signedIn' ? (
             <a class="btn btn-small" href="/account">Account</a>
           ) : session.status === 'signedOut' ? (

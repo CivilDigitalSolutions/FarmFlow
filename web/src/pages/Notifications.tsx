@@ -6,6 +6,7 @@ import type { PushState } from '../push.ts';
 import { useRequireSignIn } from './Account.tsx';
 
 const PREFS: { field: NotifyPref; label: string }[] = [
+  { field: 'notifyMessages', label: 'Messages from buyers and sellers' },
   { field: 'notifyFavourites', label: 'New listings from sellers I follow' },
   { field: 'notifyExpiry', label: 'Listing expiry reminders' },
   { field: 'notifyAnnouncements', label: 'Announcements from FarmFlow' },

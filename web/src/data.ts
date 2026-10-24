@@ -23,6 +23,7 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
   writeBatch,
 } from 'firebase/firestore/lite';
 import { USE_EMULATORS, app } from './firebase.ts';
@@ -112,6 +113,7 @@ export async function createProfile(
       notifyFavourites: true,
       notifyExpiry: true,
       notifyAnnouncements: true,
+      notifyMessages: true,
       marketingConsent: false,
       marketingConsentAt: null,
       marketingEmail: '',
@@ -256,11 +258,12 @@ export async function markNotificationsRead(uid: string, ids: string[]): Promise
 }
 
 /** The app's Settings → Notifications preferences (users/{uid}); absent means on. */
-export type NotifyPref = 'notifyFavourites' | 'notifyExpiry' | 'notifyAnnouncements';
+export type NotifyPref = 'notifyMessages' | 'notifyFavourites' | 'notifyExpiry' | 'notifyAnnouncements';
 
 export async function loadNotifyPrefs(uid: string): Promise<Record<NotifyPref, boolean>> {
   const d = (await getDoc(doc(db, 'users', uid))).data() ?? {};
   return {
+    notifyMessages: d.notifyMessages !== false,
     notifyFavourites: d.notifyFavourites !== false,
     notifyExpiry: d.notifyExpiry !== false,
     notifyAnnouncements: d.notifyAnnouncements !== false,
@@ -269,4 +272,26 @@ export async function loadNotifyPrefs(uid: string): Promise<Record<NotifyPref, b
 
 export async function setNotifyPref(uid: string, field: NotifyPref, value: boolean): Promise<void> {
   await updateDoc(doc(db, 'users', uid), { [field]: value });
+}
+
+/**
+ * Chats with a message waiting for the user (the header badge). Firestore Lite has no listeners, so
+ * the header polls this; the /messages pages themselves are live (messages.ts). Blocked people's chats
+ * don't count.
+ */
+export async function unreadChatCount(uid: string): Promise<number> {
+  const [convs, states, blocked] = await Promise.all([
+    getDocs(query(collection(db, 'conversations'), where('participants', 'array-contains', uid), orderBy('lastMessageAt', 'desc'), limit(100))),
+    getDocs(collection(db, 'users', uid, 'convState')),
+    getDocs(collection(db, 'users', uid, 'blockedUsers')),
+  ]);
+  const readAt = new Map(states.docs.map((d) => [d.id, (d.get('readAt') as { toMillis(): number } | null)?.toMillis?.() ?? 0]));
+  const blockedIds = new Set(blocked.docs.map((d) => d.id));
+  return convs.docs.filter((d) => {
+    const last = d.get('lastSenderUid') as string | null;
+    if (!last || last === uid) return false;
+    const other = d.get('sellerUid') === uid ? d.get('buyerUid') : d.get('sellerUid');
+    if (blockedIds.has(other)) return false;
+    return ((d.get('lastMessageAt') as { toMillis(): number } | null)?.toMillis?.() ?? 0) > (readAt.get(d.id) ?? 0);
+  }).length;
 }

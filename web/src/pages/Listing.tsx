@@ -158,6 +158,8 @@ function ContactAndSeller({ listingId: id, title, priceLabel, path }: { listingI
       <>
         <div class="contact">
           <a class="btn btn-primary btn-block" href={`/signin?next=${next}`}>Sign in to contact seller</a>
+          {/* In-app messaging: guests see it too, and it asks them to sign in (owner decision). */}
+          <a class="btn btn-outline btn-block" href={`/signin?next=${encodeURIComponent(`/messages/new?listing=${id}`)}`}>Message seller</a>
         </div>
         <div class="seller-hidden">
           <span aria-hidden="true">🔒</span>
@@ -184,6 +186,9 @@ function ContactAndSeller({ listingId: id, title, priceLabel, path }: { listingI
   return (
     <>
       <div class="contact">
+        {seller.id !== session.uid && (
+          <a class="btn btn-outline btn-block" href={`/messages/${id}_${session.uid}`}>Message seller</a>
+        )}
         {contactDigits(seller.contactPhone) ? (
           <div class="contact-row">
             <a class="btn btn-primary" href={whatsAppUrl(seller.contactPhone, title, priceLabel)} target="_blank" rel="noopener" onClick={() => record('CONTACT_WHATSAPP')}>

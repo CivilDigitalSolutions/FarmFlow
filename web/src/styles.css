@@ -301,3 +301,59 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .notification-list li.unread { border-left: 4px solid var(--green); }
 .notification-list p { margin: 4px 0; }
 .notification-list time { font-size: .8rem; color: var(--ink-soft); }
+
+/* ---- In-app messaging (/messages) ---- */
+.nav-messages { position: relative; }
+.nav-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 4px; border-radius: 9px; background: var(--gold); color: var(--soil); font-size: .72rem; font-weight: 800; }
+.contact > .btn-block + .btn-block, .contact > .btn-block + .contact-row, .contact > .btn-block + .hint { margin-top: 10px; }
+.chat-avatar { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; flex: none; }
+.chat-avatar.stall-initial { font-size: 1.1rem; }
+.chat-list { list-style: none; padding: 0; margin: 8px 0 24px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.chat-list li + li { border-top: 1px solid var(--line); }
+.chat-list a { display: flex; gap: 12px; align-items: center; padding: 12px 14px; color: inherit; text-decoration: none; min-height: 64px; }
+.chat-list a:hover { background: var(--green-soft); }
+.chat-row { display: grid; gap: 1px; min-width: 0; flex: 1; }
+.chat-top { display: flex; align-items: baseline; gap: 6px; }
+.chat-top strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-top time { margin-left: auto; font-size: .78rem; color: var(--ink-soft); white-space: nowrap; }
+.chat-listing { font-size: .82rem; color: var(--green); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-preview { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chat-list li.unread .chat-preview { color: var(--ink); font-weight: 700; }
+.chat-list .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex: none; margin-left: auto; }
+.chat { display: flex; flex-direction: column; }
+.chat-head { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.chat-head .back { font-size: 2rem; line-height: 1; text-decoration: none; color: var(--green-deep); min-width: 32px; min-height: 32px; display: inline-flex; align-items: center; justify-content: center; }
+.chat-who { flex: 1; min-width: 0; }
+.chat-who strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.other-chats summary { cursor: pointer; color: var(--green); font-size: .85rem; font-weight: 700; min-height: 24px; }
+.other-chats ul { margin: 4px 0; padding-left: 18px; }
+.chat-menu { position: relative; }
+.chat-menu .menu { position: absolute; right: 0; top: 100%; z-index: 5; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); min-width: 220px; padding: 4px 0; }
+.chat-menu .menu button { display: block; width: 100%; text-align: left; padding: 10px 14px; background: none; border: 0; font: inherit; color: var(--ink); cursor: pointer; }
+.chat-menu .menu button:hover { background: var(--green-soft); }
+.chat-listing-card { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 12px; background: var(--green-soft); color: inherit; text-decoration: none; }
+.chat-listing-card img, .chat-listing-card .emoji { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex: none; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; background: #fff; }
+.chat-listing-card span { display: grid; min-width: 0; }
+.chat-listing-card strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-listing-card small { color: var(--ink-soft); }
+.chat-body { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; min-height: 40vh; }
+.safety-note { text-align: center; color: var(--ink-soft); font-size: .8rem; margin: 0 8px 6px; }
+.chat-body .day, .chat-body .unread-line { text-align: center; font-size: .78rem; color: var(--ink-soft); margin: 8px 0 2px; }
+.chat-body .unread-line { color: var(--green); font-weight: 700; }
+.bubble { max-width: min(80%, 520px); padding: 8px 12px; border-radius: 16px; overflow-wrap: anywhere; }
+.bubble p { margin: 0; white-space: pre-wrap; }
+.bubble.mine { margin-left: auto; background: var(--green); color: #fff; border-bottom-right-radius: 4px; }
+.bubble.theirs { margin-right: auto; background: var(--card); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.bubble .meta { display: flex; gap: 8px; justify-content: flex-end; align-items: center; font-size: .72rem; opacity: .85; margin-top: 2px; }
+.bubble .link { background: none; border: 0; padding: 0 2px; min-height: 24px; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+.composer { position: sticky; bottom: 0; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; padding: 10px 0 14px; background: var(--cream); }
+.composer textarea { width: 100%; resize: vertical; min-height: 48px; max-height: 40vh; padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; font: inherit; font-size: 16px; background: #fff; color: var(--ink); }
+.composer .error { grid-column: 1 / -1; margin: 0; color: var(--error); font-size: .88rem; }
+.composer .counter { grid-column: 1 / -1; color: var(--ink-soft); font-size: .78rem; }
+.composer .btn { min-height: 48px; }
+.dialog-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(34, 48, 30, .45); display: flex; align-items: center; justify-content: center; padding: var(--gutter); }
+.dialog { background: var(--card); border-radius: var(--radius); padding: 18px; width: min(440px, 100%); max-height: 90vh; overflow: auto; box-shadow: var(--shadow); }
+.dialog h2 { margin-top: 0; }
+.dialog .radio { display: flex; gap: 8px; align-items: center; min-height: 32px; }
+.dialog textarea { width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 16px; }
+.dialog .row { display: flex; justify-content: flex-end; gap: 8px; }

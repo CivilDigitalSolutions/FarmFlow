@@ -1,0 +1,30 @@
+{
+  "comment": "Owner decision 2026-10-24: no links, nothing that takes a buyer out of FarmFlow; phone numbers allowed. One list shared by firestore.rules tests, functions tests, the website (web/test) and Android (MessageTextTest) so every copy of the check refuses and allows the same text.",
+  "refused": [
+    "see https://example.org",
+    "http://x.y",
+    "go to www.farm.example",
+    "farmshop.com has more",
+    "bit.ly/abc",
+    "message me wa.me/18765550173",
+    "t.me/farmer",
+    "bob@gmail.com",
+    "find me @farmer_bob",
+    "MY SITE: FARM.CO",
+    "jamaicafresh.jm",
+    "line one\nhttps://x.org",
+    "goo.gl/maps/xyz",
+    "order at fresh-farm.shop"
+  ],
+  "allowed": [
+    "Is this still available?",
+    "Yes! Call me on +1 876 555 0173 or (868) 555-0101",
+    "Price is 2.50 per lb",
+    "e.g. yam, dasheen",
+    "Mr. Brown will meet you",
+    "ok... see you at 3",
+    "line one\nline two",
+    "I can do 10 lb for $25.00. Pick up at the market.",
+    "WhatsApp me on 876-555-0173"
+  ]
+}

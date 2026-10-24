@@ -106,7 +106,8 @@ self.addEventListener('push', (event) => {
     body: n.body || '',
     icon: n.icon || PUSH_ICON,
     badge: n.badge || PUSH_BADGE,
-    tag: msg.fcmMessageId || undefined,
+    // Chat pushes carry a per-chat tag, so a new message replaces that chat's last notification.
+    tag: n.tag || msg.fcmMessageId || undefined,
     data: { link },
   }));
 });

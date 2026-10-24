@@ -14,6 +14,8 @@
       { "source": "/account", "destination": "/index.html" },
       { "source": "/account/setup", "destination": "/index.html" },
       { "source": "/notifications", "destination": "/index.html" },
+      { "source": "/messages", "destination": "/index.html" },
+      { "source": "/messages/*", "destination": "/index.html" },
       { "source": "/sell", "destination": "/index.html" },
       { "source": "/sell/new", "destination": "/index.html" },
       { "source": "/sell/edit", "destination": "/index.html" },
@@ -35,8 +37,8 @@
       { "source": "/sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
       { "source": "/manifest.webmanifest", "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }] },
       { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
-      { "source": "/@(signin|account|notifications|sell|donate)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
-      { "source": "/@(account|sell|donate)/**", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/@(signin|account|notifications|messages|sell|donate)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/@(account|messages|sell|donate)/**", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
       { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
     ]
   }
