@@ -5,13 +5,17 @@ import { PLAY_URL, isAndroid, isIos, isStandalone, store } from './format.ts';
 import { openedFromApp } from './promo.ts';
 import { formatDistance, priceEstimateLabel } from './search.ts';
 import { clearNotice, dataModule, refreshSession, useSession } from './session.ts';
+import { useLocation } from './router.ts';
 import type { PublicListing, Verification } from './types.ts';
 
 // Class names match functions/web/render.js (the server-rendered pages) so the app takes over a
 // server-rendered page without the layout shifting.
 
-/** Chats waiting for the signed-in user, re-checked every minute while the page is visible. */
-function useUnreadChats(uid: string | null): number {
+/**
+ * Chats waiting for the signed-in user, re-checked on every page change (so reading a chat clears
+ * the badge) and every minute while the page is visible.
+ */
+function useUnreadChats(uid: string | null, path: string): number {
   const [n, setN] = useState(0);
   useEffect(() => {
     if (!uid) { setN(0); return; }
@@ -25,13 +29,14 @@ function useUnreadChats(uid: string | null): number {
     document.addEventListener('visibilitychange', check);
     window.addEventListener('popstate', check);
     return () => { live = false; clearInterval(timer); document.removeEventListener('visibilitychange', check); window.removeEventListener('popstate', check); };
-  }, [uid]);
+  }, [uid, path]);
   return n;
 }
 
 export function Header() {
   const session = useSession();
-  const unread = useUnreadChats(session.status === 'signedIn' ? session.uid : null);
+  const loc = useLocation();
+  const unread = useUnreadChats(session.status === 'signedIn' ? session.uid : null, loc.path);
   return (
     <header class="topbar">
       <div class="topbar-in">
