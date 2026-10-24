@@ -36,6 +36,9 @@ export function ProfileEditor({ uid, email }: { uid: string; email: string | nul
   return (
     <section class="profile" aria-labelledby="profile-title">
       <h2 id="profile-title">Your profile</h2>
+      {profile.isSeller && !profile.contactPhone && (
+        <p class="notice-box"><strong>Buyers can’t contact you yet.</strong> Add your WhatsApp / SMS number below.</p>
+      )}
       <Photo uid={uid} profile={profile} onSaved={setProfile} />
       <Identity uid={uid} profile={profile} meta={meta} townName={town?.name ?? ''} onSaved={setProfile} />
       {profile.isSeller && <FarmDescription uid={uid} profile={profile} onSaved={setProfile} />}

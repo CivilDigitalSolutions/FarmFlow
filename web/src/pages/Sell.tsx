@@ -245,7 +245,8 @@ function BecomeSeller({ session, profile }: { session: SignedIn; profile: Seller
 
 /** ContactPhoneDialog, inline. */
 export function ContactNumber({ uid, profile, onSaved }: { uid: string; profile: SellerProfile; onSaved: (p: SellerProfile) => void }) {
-  const [editing, setEditing] = useState(false);
+  // No number yet: open the form straight away (buyers can't reach the seller without one).
+  const [editing, setEditing] = useState(!profile.contactPhone);
   const [value, setValue] = useState(profile.contactPhone);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -282,7 +283,11 @@ export function ContactNumber({ uid, profile, onSaved }: { uid: string; profile:
     );
   }
   return (
-    <form class="contact-card email-form" onSubmit={save}>
+    <form class={`contact-card email-form ${profile.contactPhone ? '' : 'contact-missing'}`} onSubmit={save}>
+      {!profile.contactPhone && <>
+        <strong>Buyers can’t contact you yet</strong>
+        <p>Add your WhatsApp / SMS number so buyers can reach you from your listings. Only signed-in buyers see it.</p>
+      </>}
       <label>
         <span>Phone (WhatsApp / SMS)</span>
         <input type="tel" inputMode="tel" autoComplete="tel" value={value} maxLength={LIMITS.phone} placeholder="e.g. +1 758 555 0123"
@@ -292,7 +297,7 @@ export function ContactNumber({ uid, profile, onSaved }: { uid: string; profile:
       {error && <p class="error" role="alert">{error}</p>}
       <p class="row">
         <button type="submit" class="btn btn-small btn-primary" disabled={busy}>{busy ? 'Saving…' : 'Save'}</button>
-        <button type="button" class="btn btn-small btn-ghost" disabled={busy} onClick={() => setEditing(false)}>Cancel</button>
+        {profile.contactPhone && <button type="button" class="btn btn-small btn-ghost" disabled={busy} onClick={() => setEditing(false)}>Cancel</button>}
       </p>
     </form>
   );

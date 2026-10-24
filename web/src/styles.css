@@ -222,7 +222,7 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .profile-facts dd { margin: 0; overflow-wrap: anywhere; }
 .profile .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.contact-missing { border-color: var(--gold); border-left-width: 4px; }
+.contact-missing { border-color: var(--gold); border-left-width: 4px; background: #FFF4D6; }
 .tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 16px 0 12px; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab { flex: none; min-height: 44px; padding: 8px 12px; border: 0; border-bottom: 3px solid transparent; background: none; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
