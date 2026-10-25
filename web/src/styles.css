@@ -101,7 +101,13 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .home-static p { max-width: 62ch; }
 
 /* ---------- cards ---------- */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); grid-auto-rows: 1fr; gap: 12px; }
+/* Rows size to their tallest card (cards in a row still match). Not 1fr: that made every row as tall as
+   the tallest anywhere, so a collapsed ad row became a blank row. */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); column-gap: 12px; grid-auto-flow: row dense; }
+/* Rows are spaced by the cards' own margin, not row-gap, so a collapsed (empty) ad row adds no space.
+   dense: cards fill any cells left before a full-width ad row. */
+.grid > * { margin-bottom: 12px; }
+.grid > .ad-card { margin-bottom: 12px; }
 @media (min-width: 720px) { .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; } }
 .card { display: flex; flex-direction: column; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; text-decoration: none; color: inherit; }
 .card:hover { box-shadow: 0 2px 4px rgba(34, 48, 30, .08), 0 14px 34px rgba(34, 48, 30, .14); }
@@ -196,9 +202,15 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 /* ---------- ads (ads.tsx) ---------- */
 .ad-slot { margin: 20px 0 8px; }
 .ad-label { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
-.ad-card { margin: 0; padding: 8px 10px 10px; min-height: 0; }
-/* Nothing to show (no fill, or an ad blocker): take no space, as the app's ad slots collapse. */
-.ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
+/* In the listing grid the ad takes its own full-width row (so it never leaves a hole in the grid, and the
+   in-feed unit is measured at the width it will show at). */
+.ad-card { margin: 0; padding: 8px 10px 10px; min-height: 0; grid-column: 1 / -1; }
+/* Until Google has actually filled the slot, it takes no space and shows no "Sponsored" label — while
+   AdSense is still reviewing the site, before the visitor's consent choice, with no fill, or behind an
+   ad blocker it used to leave an empty 300-400px "Sponsored" box. The box stays in the layout (height 0,
+   not display: none), so the slot can still be seen as near the screen and AdSense can measure its width. */
+.ad-slot:not(:has(ins[data-ad-status="filled"])) { height: 0; margin: 0; padding: 0; overflow: hidden; background: none; box-shadow: none; border: 0; }
+.grid > .ad-slot:not(:has(ins[data-ad-status="filled"])) { margin-bottom: 0; }
 .ad-controls .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
 .ad-controls .toggle input { width: 24px; height: 24px; accent-color: var(--green); }
 
@@ -357,3 +369,16 @@ input[type=checkbox] { width: 24px; height: 24px; accent-color: var(--green); } 
 .dialog .radio { display: flex; gap: 8px; align-items: center; min-height: 32px; }
 .dialog textarea { width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 16px; }
 .dialog .row { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* A chat on its own (main.tsx sets html.chat-mode on /messages/{id}): the page is exactly the window
+   height, minus the keyboard (viewport interactive-widget=resizes-content), with no footer or app card.
+   The messages scroll inside; the composer sits right on the keyboard. */
+html.chat-mode, html.chat-mode body { height: 100%; overflow: hidden; }
+html.chat-mode #app { height: 100vh; height: 100dvh; min-height: 0; }
+html.chat-mode #app > .page.chat { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-bottom: 0; width: 100%; }
+html.chat-mode .chat .chat-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+html.chat-mode .composer { position: static; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+@media (max-width: 640px) {
+  html.chat-mode .topbar { display: none; } /* the chat has its own back arrow; more room for messages */
+  html.chat-mode .chat-head { padding-top: max(8px, env(safe-area-inset-top)); }
+}

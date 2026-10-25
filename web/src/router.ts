@@ -39,6 +39,9 @@ export function useLocation(): Location {
     const update = () => setLoc(current());
     listeners.add(update);
     window.addEventListener('popstate', update);
+    // A child's effect can navigate before this (parent) effect subscribes — e.g. a signed-out visit to
+    // /messages redirecting to /signin on first load — so catch up with the address now.
+    update();
     return () => {
       listeners.delete(update);
       window.removeEventListener('popstate', update);

@@ -1,4 +1,5 @@
 import { render } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { AppPromo, Footer, Header } from './components.tsx';
 import { Account, AccountSetup } from './pages/Account.tsx';
 import { Donate, DonateThanks } from './pages/Donate.tsx';
@@ -47,14 +48,19 @@ function Route({ loc }: { loc: Location }) {
   return <Gone kind="page" />;
 }
 
+/** A single chat fills the window like an app screen: no footer or app card (styles.css html.chat-mode). */
+const isChatPath = (p: string) => /^\/messages\/[^/]+\/?$/.test(p) && !/^\/messages\/new\/?$/.test(p);
+
 function App() {
   const loc = useLocation();
+  const chat = isChatPath(loc.path);
+  useEffect(() => { document.documentElement.classList.toggle('chat-mode', chat); }, [chat]);
   return (
     <>
       <Header />
       <Route loc={loc} />
-      <Footer />
-      <AppPromo />
+      {!chat && <Footer />}
+      {!chat && <AppPromo />}
     </>
   );
 }

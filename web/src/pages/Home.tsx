@@ -105,7 +105,7 @@ export function Home({ loc }: { loc: Location }) {
       <InstallHint />
       <section class="hero">
         <h1>Fresh produce, straight from Caribbean growers</h1>
-        <p>Browse what’s in stock today, then contact the seller directly on WhatsApp or SMS.</p>
+        <p>Browse what’s in stock today, then message the seller in FarmFlow, or on WhatsApp or SMS.</p>
         <form class="searchbar" role="search" onSubmit={(e) => e.preventDefault()}>
           <label class="sr-only" for="q">Search produce</label>
           <input
@@ -201,7 +201,7 @@ export function Home({ loc }: { loc: Location }) {
 
       <section class="sell-cta">
         <h2>Grow produce? Sell it on FarmFlow</h2>
-        <p>Listing is free. Create an account, add your produce with photos and a price, and buyers contact you directly on WhatsApp or SMS — from this website or the FarmFlow Android app.</p>
+        <p>Listing is free. Create an account, add your produce with photos and a price, and buyers message you in FarmFlow or on WhatsApp or SMS — from this website or the FarmFlow Android app.</p>
         <p class="row">
           <a class="btn btn-primary" href="/sell">Start selling</a>
           <a class="btn btn-outline" href="/about/">How FarmFlow works</a>

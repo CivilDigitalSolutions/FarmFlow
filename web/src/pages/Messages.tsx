@@ -167,6 +167,18 @@ function Chat({ uid, convId }: { uid: string; convId: string }) {
     if (document.visibilityState === 'visible') m.markRead(uid, convId);
     endRef.current?.scrollIntoView({ block: 'end' });
   }, [m, conv != null, messages.length]);
+  // The keyboard opening shrinks the page (interactive-widget=resizes-content): keep the newest message
+  // in view if the reader was already at the bottom.
+  useEffect(() => {
+    const body = () => endRef.current?.parentElement;
+    let atBottom = true;
+    const onScroll = () => { const b = body(); if (b) atBottom = b.scrollHeight - b.scrollTop - b.clientHeight < 80; };
+    const onResize = () => { if (atBottom) endRef.current?.scrollIntoView({ block: 'end' }); };
+    const b = body();
+    b?.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    return () => { b?.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize); };
+  }, [m, conv != null]);
   useEffect(() => {
     const onVis = () => { if (document.visibilityState === 'visible' && m && conv) m.markRead(uid, convId); };
     document.addEventListener('visibilitychange', onVis);

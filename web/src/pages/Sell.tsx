@@ -222,8 +222,8 @@ function BecomeSeller({ session, profile }: { session: SignedIn; profile: Seller
   return (
     <form class="auth-card email-form become-seller" onSubmit={submit}>
       <h1>Are you sure you want to become a seller?</h1>
-      <p>Selling on FarmFlow is free. List your produce with photos and a price; buyers contact you
-        directly on WhatsApp or SMS, and you agree the sale between you.</p>
+      <p>Selling on FarmFlow is free. List your produce with photos and a price; buyers message you
+        in FarmFlow or on WhatsApp or SMS, and you agree the sale between you.</p>
       <p>Sellers must comply with FarmFlow’s <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a>,{' '}
         <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> and marketplace rules
         (including the <a href="/prohibited-items/" target="_blank" rel="noopener">prohibited items list</a>).</p>

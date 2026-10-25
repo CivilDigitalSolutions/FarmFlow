@@ -140,7 +140,8 @@ export function initSession(path: string): void {
   let pendingRedirect = false;
   try { pendingRedirect = sessionStorage.getItem(PENDING_REDIRECT_KEY) != null; } catch { /* ignore */ }
   const needsAuth = store.get(SESSION_FLAG) === '1' || pendingRedirect ||
-    path.startsWith('/signin') || path.startsWith('/account') || path.startsWith('/sell');
+    path.startsWith('/signin') || path.startsWith('/account') || path.startsWith('/sell') ||
+    path.startsWith('/messages') || path.startsWith('/notifications');
   if (needsAuth) authModule();
   else set({ status: 'signedOut' });
 }
